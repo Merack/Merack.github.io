@@ -5,7 +5,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>
-    Merack
+    Gridea | Merack
 </title>
 <link rel="shortcut icon" href="https://merack.github.io/favicon.ico?v=1578415295012">
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
@@ -96,93 +96,41 @@
             <div id="main-content" class="post-container main-container">
                 <div id="content" class="main-container-left">
                     
+    <div class="i-card">
+        <b>标签：#
+        Gridea</b>
+    </div>
+    
         
             <article class="post i-card">
                 <h2 class="post-title">
-                    <a href="https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei">
-                        “百度杯”CTF比赛 十一月场 &#39;小可爱&#39; writeup(伪)
+                    <a href="https://merack.github.io/post/hello-gridea">
+                        Hello Gridea
                     </a>
                 </h2>
                 <div class="post-info">
-                    <time class="post-time">2020-01-08</time>
+                    <time class="post-time">2018-12-12</time>
                     
-                </div>
-                <div class="post-article">
-                    
-                            <div class="post-content">
-                                
-                                        <div class="post-content-content">
-                                            题目内容：
-小可爱最喜欢的图片就是它了
-tips：txt文件内容即为密码
-题目给出了一张图片
-
-附上下载链接:
-百度云
-writeup
-1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码
-
-根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E
-2.跑py脚本解密
-代码如下(Python2环境)
-from zlib import crc32
-import random
-
-char=&#39;0123456789&#39;
-
-def crc32_f(data):
-    return hex(crc32(data)&amp;amp;0xffffffff)[2:10]
-
-length=input(&#39;length:&#39;)
-crc32_=raw_input(&#39;crc32:&#39;).lower()
-
-while True:
-    text=&#39;&#39;
-    for i in range(length):
-        text+=char[random.randint(0,len(char)-1)]
-    if crc32_f(text)==crc32_:
-        raw_input(&#39;find it:&#39;+text)
-        exit
-
-脚本运行时需要输入密码长度,这里填8, 然后是CRC密文, 这里填BACAB29E
-接下来就是漫长的等待了,最后跑出密码:34878956
-跑出来时忘记截图了,不想再跑一次了,跑8位数时间还是有点久的
-3.有了密码就可以把压缩包里的图片解压出来了,是一张撕裂成好几部分的二维码, 使用ps拼好或者打印出来裁剪拼好扫描结果应该就是flag了,由于不会ps最终答案你们自己来吧(逃
-
-
-                                        </div>
-                                        
-                                            <a class="btn btn-text" href="https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei">Read More ~</a>
-                            </div>
-                </div>
-            </article>
-            
-            <article class="post i-card">
-                <h2 class="post-title">
-                    <a href="https://merack.github.io/post/about">
-                        关于
-                    </a>
-                </h2>
-                <div class="post-info">
-                    <time class="post-time">2019-06-04</time>
-                    
-                        <a href="https://merack.github.io/tag/5NjSm_TQE" class="post-tag i-tag
-                            i-tag-info">
-            #About
+                        <a href="https://merack.github.io/tag/gridea" class="post-tag i-tag
+                            i-tag-primary">
+            #Gridea
         </a>
                         
                 </div>
                 <div class="post-article">
                     
+                        <a href="https://merack.github.io/post/hello-gridea" class="post-feature-image" style="background-image:url(https://merack.github.io/post-images/hello-gridea.png) ">
+                        </a>
+                        
                             <div class="post-content">
                                 
                                     <div class="post-content-abstract">
-                                        <p>ID: Merack</p>
-<p>E-Mail:  merack@qq.com</p>
+                                        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
 
                                     </div>
                                     
-                                            <a class="btn btn-text" href="https://merack.github.io/post/about">Read More ~</a>
+                                            <a class="btn btn-text" href="https://merack.github.io/post/hello-gridea">Read More ~</a>
                             </div>
                 </div>
             </article>
