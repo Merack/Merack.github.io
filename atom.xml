@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://merack.github.io</id>
     <title>Merack</title>
-    <updated>2020-01-07T17:00:45.127Z</updated>
+    <updated>2020-04-25T02:50:29.971Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://merack.github.io"/>
     <link rel="self" href="https://merack.github.io/atom.xml"/>
@@ -12,8 +12,8 @@
     <rights>All rights reserved 2020, Merack</rights>
     <entry>
         <title type="html"><![CDATA[“百度杯”CTF比赛 十一月场 '小可爱' writeup(伪)]]></title>
-        <id>https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei</id>
-        <link href="https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei">
+        <id>https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/</id>
+        <link href="https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/">
         </link>
         <updated>2020-01-07T16:40:21.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="题目内容">题目内容：</h4>
@@ -27,8 +27,8 @@ tips：txt文件内容即为密码</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[关于]]></title>
-        <id>https://merack.github.io/post/about</id>
-        <link href="https://merack.github.io/post/about">
+        <id>https://merack.github.io/post/about/</id>
+        <link href="https://merack.github.io/post/about/">
         </link>
         <updated>2019-06-03T16:14:00.000Z</updated>
         <summary type="html"><![CDATA[<p>ID: Merack</p>
