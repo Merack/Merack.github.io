@@ -7,7 +7,7 @@
 <title>
     “百度杯”CTF比赛 十一月场 &#39;小可爱&#39; writeup(伪) | Merack
 </title>
-<link rel="shortcut icon" href="https://merack.eu.org/favicon.ico?v=1588828475496">
+<link rel="shortcut icon" href="https://merack.eu.org/favicon.ico?v=1588829086881">
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
 <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -28,7 +28,7 @@
     <div class="nav">
         <div class="logo">
             <a href="https://merack.eu.org">
-                <img class="avatar" src="https://merack.eu.org/images/avatar.png?v=1588828475496" alt="">
+                <img class="avatar" src="https://merack.eu.org/images/avatar.png?v=1588829086881" alt="">
             </a>
             <div class="site-title">
                 <h1>
@@ -105,7 +105,7 @@
                             <time class="post-time">2020-01-08</time>
                             
                                 <a href="https://merack.eu.org/tag/rkweiKWEq/" class="post-tag i-tag
-                            i-tag-error">
+                            i-tag-other_1">
                             #ctf
                         </a>
                                 
@@ -131,7 +131,7 @@ tips：txt文件内容即为密码</p>
 <p>根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E</p>
 <p>2.跑py脚本解密</p>
 <p>代码如下(Python2环境)</p>
-<pre><code class="language-python">from zlib import crc32
+<pre><code>from zlib import crc32
 import random
 
 char='0123456789'
