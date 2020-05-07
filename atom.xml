@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://merack.github.io</id>
+    <id>https://merack.eu.org</id>
     <title>Merack</title>
-    <updated>2020-04-25T04:22:50.933Z</updated>
+    <updated>2020-05-07T05:14:37.850Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://merack.github.io"/>
-    <link rel="self" href="https://merack.github.io/atom.xml"/>
+    <link rel="alternate" href="https://merack.eu.org"/>
+    <link rel="self" href="https://merack.eu.org/atom.xml"/>
     <subtitle>伪文艺技术宅</subtitle>
-    <logo>https://merack.github.io/images/avatar.png</logo>
-    <icon>https://merack.github.io/favicon.ico</icon>
+    <logo>https://merack.eu.org/images/avatar.png</logo>
+    <icon>https://merack.eu.org/favicon.ico</icon>
     <rights>All rights reserved 2020, Merack</rights>
     <entry>
         <title type="html"><![CDATA[test]]></title>
-        <id>https://merack.github.io/post/t9nwf4_Hw/</id>
-        <link href="https://merack.github.io/post/t9nwf4_Hw/">
+        <id>https://merack.eu.org/post/t9nwf4_Hw/</id>
+        <link href="https://merack.eu.org/post/t9nwf4_Hw/">
         </link>
         <updated>2020-04-25T03:58:22.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[“百度杯”CTF比赛 十一月场 '小可爱' writeup(伪)]]></title>
-        <id>https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/</id>
-        <link href="https://merack.github.io/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/">
+        <id>https://merack.eu.org/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/</id>
+        <link href="https://merack.eu.org/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/">
         </link>
         <updated>2020-01-07T16:40:21.000Z</updated>
         <summary type="html"><![CDATA[<h4 id="题目内容">题目内容：</h4>
@@ -34,8 +34,8 @@ tips：txt文件内容即为密码</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[关于]]></title>
-        <id>https://merack.github.io/post/about/</id>
-        <link href="https://merack.github.io/post/about/">
+        <id>https://merack.eu.org/post/about/</id>
+        <link href="https://merack.eu.org/post/about/">
         </link>
         <updated>2019-06-03T16:14:00.000Z</updated>
         <summary type="html"><![CDATA[<p>ID: Merack</p>
