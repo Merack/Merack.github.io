@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://merack.eu.org</id>
     <title>Merack</title>
-    <updated>2020-05-07T05:24:51.647Z</updated>
+    <updated>2020-06-27T03:14:09.277Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://merack.eu.org"/>
     <link rel="self" href="https://merack.eu.org/atom.xml"/>
@@ -11,11 +11,11 @@
     <icon>https://merack.eu.org/favicon.ico</icon>
     <rights>All rights reserved 2020, Merack</rights>
     <entry>
-        <title type="html"><![CDATA[test]]></title>
-        <id>https://merack.eu.org/post/t9nwf4_Hw/</id>
-        <link href="https://merack.eu.org/post/t9nwf4_Hw/">
+        <title type="html"><![CDATA[使用Python脚本+腾讯云serverless实现曲奇云盘自动签到]]></title>
+        <id>https://merack.eu.org/post/iiam_7gNI/</id>
+        <link href="https://merack.eu.org/post/iiam_7gNI/">
         </link>
-        <updated>2020-04-25T03:58:22.000Z</updated>
+        <updated>2020-06-24T16:29:08.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[“百度杯”CTF比赛 十一月场 '小可爱' writeup(伪)]]></title>

@@ -5,7 +5,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>
-    Hello Gridea | Merack
+    使用Python脚本+腾讯云serverless实现曲奇云盘自动签到 | Merack
 </title>
 <link rel="shortcut icon" href="https://merack.eu.org/favicon.ico?v=1593227065665">
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
@@ -99,47 +99,57 @@
                 <div id="content" class="main-container-left">
                     <article class="post i-card">
                         <h2 class="post-title">
-                            Hello Gridea
+                            使用Python脚本+腾讯云serverless实现曲奇云盘自动签到
                         </h2>
                         <div class="post-info">
-                            <time class="post-time">2018-12-12</time>
+                            <time class="post-time">2020-06-25</time>
                             
-                                <a href="https://merack.eu.org/tag/gridea/" class="post-tag i-tag
-                            i-tag-banana">
-                            #Gridea
-                        </a>
-                                
                         </div>
                         
-                            <div class="post-feature-image" style="background-image: url('https://merack.eu.org/post-images/hello-gridea.png')"></div>
-                            
                                 <div class="post-content">
-                                    <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="http://hvenotes.fehey.com/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>𝖶𝗂𝗇𝖽𝗈𝗐𝗌</strong> 或 <strong>𝖬𝖺𝖼𝖮𝖲</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+                                    <h3 id="说明">说明</h3>
+<p>曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到</p>
+<h3 id="签到有什么用">签到有什么用?</h3>
+<p>目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python</p>
+<h3 id="使用说明">使用说明</h3>
+<h4 id="1创建serverless云函数">1.创建serverless云函数</h4>
+<p>注册腾讯云, 创建一个serverless云函数, 选择空白模板, 运行环境选择Python3<br>
+<img src="https://i.loli.net/2020/06/25/sAat1oY3jTEpSnD.png" alt="2020_0625_1593016738.png" loading="lazy"></p>
+<h4 id="2输入代码">2.输入代码</h4>
+<p>将下面提供的代码复制到index.py里, 填上手机号和密码后点左下角的完成. 目录里好像还有个config.json, 可以删了没什么用<br>
+代码gitee地址:<a href="https://gitee.com/Merack/quqiSign"><br>
+https://gitee.com/Merack/quqiSign</a></p>
+<h4 id="3配置超时时间">3.配置超时时间</h4>
+<p>因为在执行后需要等待几秒钟曲奇服务器才会记录,直接签到的话会导致逛群组签到这一项失败<br>
+因此在逛群组签到前我设置了5秒的休眠<br>
+为了防止在函数在休眠期间就被腾讯云强制停止, 这里需要把函数配置里的超时时间设置成&gt;5s, 我个人的设置是10s<br>
+<img src="https://i.loli.net/2020/06/27/ZtKGTQnfYHu7Ljb.png" alt="2020_0627_1593188640.png" loading="lazy"></p>
+<h4 id="4测试">4.测试</h4>
+<p>点击&quot;函数代码&quot;, 再点击左下角的测试, 观察执行日志来确认是否执行成功了<br>
+<img src="https://i.loli.net/2020/06/27/4LEAV1o7ry9bgYz.png" alt="success" loading="lazy"></p>
+<p>如果签到过了结果就是如下图<br>
+<img src="https://i.loli.net/2020/06/27/f9d5NeXiJrIpDxk.png" alt="abc" loading="lazy"></p>
+<h4 id="5定时触发">5.定时触发</h4>
+<p>创建一个定时触发器<br>
+我的设定是每天00:30执行签到</p>
+<pre><code>0 30 0 * * * *
+</code></pre>
+<p>具体可以根据自己的情况来<br>
+根据 cron表达式文档来就行: <a href="https://cloud.tencent.com/document/product/583/9708#cron-.E8.A1.A8.E8.BE.BE.E5.BC.8F">腾讯官方文档</a></p>
 
                                 </div>
                     </article>
                     <!--  -->
                     
+                        <div class="next-post">
+                            <div class="next">下一篇</div>
+                            <a href="https://merack.eu.org/post/bai-du-bei-ctf-bi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei/">
+                                <h3 class="post-title">
+                                    “百度杯”CTF比赛 十一月场 &#39;小可爱&#39; writeup(伪)
+                                </h3>
+                            </a>
+                        </div>
+                        
                             <div id="disqus_thread"></div>
                             <div id="gitalk-container"></div>
                 </div>
@@ -156,7 +166,21 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
+<li>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明</a></li>
+<li><a href="#%E7%AD%BE%E5%88%B0%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8">签到有什么用?</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">使用说明</a>
+<ul>
+<li><a href="#1%E5%88%9B%E5%BB%BAserverless%E4%BA%91%E5%87%BD%E6%95%B0">1.创建serverless云函数</a></li>
+<li><a href="#2%E8%BE%93%E5%85%A5%E4%BB%A3%E7%A0%81">2.输入代码</a></li>
+<li><a href="#3%E9%85%8D%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4">3.配置超时时间</a></li>
+<li><a href="#4%E6%B5%8B%E8%AF%95">4.测试</a></li>
+<li><a href="#5%E5%AE%9A%E6%97%B6%E8%A7%A6%E5%8F%91">5.定时触发</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

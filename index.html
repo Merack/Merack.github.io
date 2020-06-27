@@ -7,7 +7,7 @@
 <title>
     Merack
 </title>
-<link rel="shortcut icon" href="https://merack.eu.org/favicon.ico?v=1588829086881">
+<link rel="shortcut icon" href="https://merack.eu.org/favicon.ico?v=1593227065665">
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
 <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -27,7 +27,7 @@
     <div class="nav">
         <div class="logo">
             <a href="https://merack.eu.org">
-                <img class="avatar" src="https://merack.eu.org/images/avatar.png?v=1588829086881" alt="">
+                <img class="avatar" src="https://merack.eu.org/images/avatar.png?v=1593227065665" alt="">
             </a>
             <div class="site-title">
                 <h1>
@@ -99,12 +99,12 @@
         
             <article class="post i-card">
                 <h2 class="post-title">
-                    <a href="https://merack.eu.org/post/t9nwf4_Hw/">
-                        test
+                    <a href="https://merack.eu.org/post/iiam_7gNI/">
+                        使用Python脚本+腾讯云serverless实现曲奇云盘自动签到
                     </a>
                 </h2>
                 <div class="post-info">
-                    <time class="post-time">2020-04-25</time>
+                    <time class="post-time">2020-06-25</time>
                     
                 </div>
                 <div class="post-article">
@@ -112,11 +112,39 @@
                             <div class="post-content">
                                 
                                         <div class="post-content-content">
-                                            ce shi ewn zhang
+                                            说明
+曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到
+签到有什么用?
+目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python
+使用说明
+1.创建serverless云函数
+注册腾讯云, 创建一个serverless云函数, 选择空白模板, 运行环境选择Python3
+
+2.输入代码
+将下面提供的代码复制到index.py里, 填上手机号和密码后点左下角的完成. 目录里好像还有个config.json, 可以删了没什么用
+代码gitee地址:
+https://gitee.com/Merack/quqiSign
+3.配置超时时间
+因为在执行后需要等待几秒钟曲奇服务器才会记录,直接签到的话会导致逛群组签到这一项失败
+因此在逛群组签到前我设置了5秒的休眠
+为了防止在函数在休眠期间就被腾讯云强制停止, 这里需要把函数配置里的超时时间设置成&amp;gt;5s, 我个人的设置是10s
+
+4.测试
+点击&amp;quot;函数代码&amp;quot;, 再点击左下角的测试, 观察执行日志来确认是否执行成功了
+
+如果签到过了结果就是如下图
+
+5.定时触发
+创建一个定时触发器
+我的设定是每天00:30执行签到
+0 30 0 * * * *
+
+具体可以根据自己的情况来
+根据 cron表达式文档来就行: 腾讯官方文档
 
                                         </div>
                                         
-                                            <a class="btn btn-text" href="https://merack.eu.org/post/t9nwf4_Hw/">Read More ~</a>
+                                            <a class="btn btn-text" href="https://merack.eu.org/post/iiam_7gNI/">Read More ~</a>
                             </div>
                 </div>
             </article>
@@ -131,12 +159,12 @@
                     <time class="post-time">2020-01-08</time>
                     
                         <a href="https://merack.eu.org/tag/rkweiKWEq/" class="post-tag i-tag
-                            i-tag-other_4">
+                            i-tag-primary">
             #ctf
         </a>
                         
                         <a href="https://merack.eu.org/tag/nnSGYGLsJO/" class="post-tag i-tag
-                            i-tag-primary">
+                            i-tag-error">
             #百度杯
         </a>
                         
@@ -167,7 +195,7 @@ tips：txt文件内容即为密码</p>
                     <time class="post-time">2019-06-04</time>
                     
                         <a href="https://merack.eu.org/tag/5NjSm_TQE/" class="post-tag i-tag
-                            i-tag-other_4">
+                            i-tag-primary">
             #About
         </a>
                         
@@ -198,7 +226,7 @@ tips：txt文件内容即为密码</p>
                     <!-- 个人信息 -->
                     
     <div class="id_card i-card">
-        <div class="id_card-avatar" style="background-image: url(https://merack.eu.org/images/avatar.png?v=1588829086881)">
+        <div class="id_card-avatar" style="background-image: url(https://merack.eu.org/images/avatar.png?v=1593227065665)">
         </div>
         <h1 class="id_card-title">
             Merack
@@ -246,7 +274,7 @@ tips：txt文件内容即为密码</p>
 
 
             <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | 
+  友情链接 <a href="https://merack.top" target="_blank">merack.top</a> | 
   <a class="rss" href="https://merack.eu.org/atom.xml" target="_blank">RSS</a>
 </div>
 
