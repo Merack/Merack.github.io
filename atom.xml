@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://merack.eu.org</id>
     <title>Merack</title>
-    <updated>2020-06-27T03:25:50.648Z</updated>
+    <updated>2020-07-07T02:00:46.425Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://merack.eu.org"/>
     <link rel="self" href="https://merack.eu.org/atom.xml"/>
@@ -17,14 +17,10 @@
         </link>
         <updated>2020-06-24T16:29:08.000Z</updated>
         <summary type="html"><![CDATA[<h3 id="说明">说明</h3>
-<p>曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到</p>
-<h3 id="签到有什么用">签到有什么用?</h3>
-<p>目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python</p>
+<p>曲奇云盘每天有3个签到任务, <s>其中有一个需要上传文加后才能签到, 这个没有实现自动签到</s>现已全部实现签到</p>
 ]]></summary>
         <content type="html"><![CDATA[<h3 id="说明">说明</h3>
-<p>曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到</p>
-<h3 id="签到有什么用">签到有什么用?</h3>
-<p>目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python</p>
+<p>曲奇云盘每天有3个签到任务, <s>其中有一个需要上传文加后才能签到, 这个没有实现自动签到</s>现已全部实现签到</p>
 ]]></content>
     </entry>
     <entry>
