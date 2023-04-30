@@ -36,6 +36,20 @@
             ],
             "date_published": "2023-04-28T21:02:51+08:00",
             "date_modified": "2023-04-28T21:02:51+08:00"
+        },
+        {
+            "id": "https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html",
+            "url": "https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html",
+            "title": "shell编程:输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天",
+            "summary": "做实验时碰的到一道shell编程题: 输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天 本来想偷懒百度抄一下的结果翻了几页都没有, 算了还是自己写吧 脚本很简单, 主要是用date命令 #!/bin/bash #create By Merack&hellip;",
+            "content_html": "<p>做实验时碰的到一道shell编程题:<br>输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天<br>本来想偷懒百度抄一下的结果翻了几页都没有, 算了还是自己写吧<br>脚本很简单, 主要是用date命令  </p>\n<pre><code class=\"language-sh\">#!/bin/bash\n#create By Merack\n#merack@qq.com\n\n\n#get the current year, month, day\ncurrentYear=`date +&quot;%Y&quot;`\ncurrentMonth=`date +&quot;%m&quot;`\ncurrentDay=`date +&quot;%d&quot;`\n\n#check whether the birthday has passed in this year \nif [[ currentMonth -lt $2  ]]\nthen\n    let &quot;passFlag=0&quot;\nelif [[ currentMonth -eq $2 ]]\nthen\n    if [[ currentDay -gt $3  ]]\n    then\n        let &quot;passFlag=1&quot;\n    else\n        let &quot;passFlag=0&quot;\n    fi\nelse\n    let &quot;passFlag=1&quot;\nfi\n\n#get age\nif [[ $passFlag -eq 0  ]] \nthen\n    let &quot;age=$currentYear-$1-1&quot;\nelse\n    let &quot;age=$currentYear-$1&quot;\nfi\necho &quot;your age: $age&quot;\n\n\n#get next Birthday\nif [[ passFlag -eq 1 ]]\nthen\n    echo &quot;Your birthday has passed in this year&quot;\n        let &quot;nextYea=currentYear+1&quot;\n        nextBirthday=$nextYea-$2-$3\n        nowStr=`date +&quot;%s&quot;`\n        nextBirStr=`date -d &quot;$nextBirthday&quot; +&quot;%s&quot;`\n        let &quot;interval=(nextBirStr-nowStr)/60/60/24&quot;\n        echo &quot;Your next birthday is: $nextBirthday and $interval days left&quot;\nelse\n    nextBirthday=$currentYear-$2-$3\n    nowStr=`date +&quot;%s&quot;`\n    nextBirStr=`date -d &quot;$nextBirthday&quot; +&quot;%s&quot;`\n    let &quot;interval=(nextBirStr-nowStr)/60/60/24&quot;\n    echo &quot;Your next birthday is: $nextBirthday and $interval days left&quot;\nfi\n</code></pre>\n<p>运行结果:<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://pic.rmb.bdstatic.com/bjh/790caf37116577e34a9d4e311f7faca8.png\" alt=\"pic1.png\"  data-is-external-image=\"true\"></figure></p>\n",
+            "author": {
+                "name": "Merack"
+            },
+            "tags": [
+            ],
+            "date_published": "2021-05-09T21:00:00+08:00",
+            "date_modified": "2023-04-30T15:23:34+08:00"
         }
     ]
 }

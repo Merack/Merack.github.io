@@ -3,7 +3,7 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://merack.eu.org/feed.xml" rel="self" />
     <link href="https://merack.eu.org" />
-    <updated>2023-04-28T21:04:38+08:00</updated>
+    <updated>2023-04-30T15:23:34+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
@@ -121,6 +121,82 @@ while True:
 <p><figure class="post__image"><img loading="lazy" src="https://i.loli.net/2020/01/08/6CJpm4wdR5yanTl.png" alt="Screenshot_2020-01-08_00-54-41.png"  data-is-external-image="true"></figure></p>
 <p>3.有了密码就可以把压缩包里的图片解压出来了,是一张撕裂成好几部分的二维码, 使用ps拼好或者打印出来裁剪拼好扫描结果应该就是flag了,由于不会ps最终答案你们自己来吧(逃</p>
 <p><figure class="post__image"><img loading="lazy" src="https://i.loli.net/2020/01/08/rXsD9d65HxYfeJU.png" alt="qr.png"  data-is-external-image="true"></figure></p>
+
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>shell编程:输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天</title>
+        <author>
+            <name>Merack</name>
+        </author>
+        <link href="https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html"/>
+        <id>https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html</id>
+
+        <updated>2023-04-30T15:23:34+08:00</updated>
+            <summary>
+                <![CDATA[
+                    做实验时碰的到一道shell编程题: 输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天 本来想偷懒百度抄一下的结果翻了几页都没有, 算了还是自己写吧 脚本很简单, 主要是用date命令 #!/bin/bash #create By Merack&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>做实验时碰的到一道shell编程题:<br>输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天<br>本来想偷懒百度抄一下的结果翻了几页都没有, 算了还是自己写吧<br>脚本很简单, 主要是用date命令  </p>
+<pre><code class="language-sh">#!/bin/bash
+#create By Merack
+#merack@qq.com
+
+
+#get the current year, month, day
+currentYear=`date +&quot;%Y&quot;`
+currentMonth=`date +&quot;%m&quot;`
+currentDay=`date +&quot;%d&quot;`
+
+#check whether the birthday has passed in this year 
+if [[ currentMonth -lt $2  ]]
+then
+    let &quot;passFlag=0&quot;
+elif [[ currentMonth -eq $2 ]]
+then
+    if [[ currentDay -gt $3  ]]
+    then
+        let &quot;passFlag=1&quot;
+    else
+        let &quot;passFlag=0&quot;
+    fi
+else
+    let &quot;passFlag=1&quot;
+fi
+
+#get age
+if [[ $passFlag -eq 0  ]] 
+then
+    let &quot;age=$currentYear-$1-1&quot;
+else
+    let &quot;age=$currentYear-$1&quot;
+fi
+echo &quot;your age: $age&quot;
+
+
+#get next Birthday
+if [[ passFlag -eq 1 ]]
+then
+    echo &quot;Your birthday has passed in this year&quot;
+        let &quot;nextYea=currentYear+1&quot;
+        nextBirthday=$nextYea-$2-$3
+        nowStr=`date +&quot;%s&quot;`
+        nextBirStr=`date -d &quot;$nextBirthday&quot; +&quot;%s&quot;`
+        let &quot;interval=(nextBirStr-nowStr)/60/60/24&quot;
+        echo &quot;Your next birthday is: $nextBirthday and $interval days left&quot;
+else
+    nextBirthday=$currentYear-$2-$3
+    nowStr=`date +&quot;%s&quot;`
+    nextBirStr=`date -d &quot;$nextBirthday&quot; +&quot;%s&quot;`
+    let &quot;interval=(nextBirStr-nowStr)/60/60/24&quot;
+    echo &quot;Your next birthday is: $nextBirthday and $interval days left&quot;
+fi
+</code></pre>
+<p>运行结果:<br><figure class="post__image"><img loading="lazy" src="https://pic.rmb.bdstatic.com/bjh/790caf37116577e34a9d4e311f7faca8.png" alt="pic1.png"  data-is-external-image="true"></figure></p>
 
             ]]>
         </content>
