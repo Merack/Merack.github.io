@@ -10,34 +10,6 @@
     },
     "items": [
         {
-            "id": "https://merack.eu.org/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html",
-            "url": "https://merack.eu.org/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html",
-            "title": "使用Python脚本+腾讯云serverless实现曲奇云盘自动签到",
-            "summary": "说明 曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到现已全部实现签到 目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python 注册腾讯云, 创建一个serverless云函数, 选择空白模板,&hellip;",
-            "content_html": "<h3 id=\"说明\">说明</h3>\n<p>曲奇云盘每天有3个签到任务, <del>其中有一个需要上传文加后才能签到, 这个没有实现自动签到</del>现已全部实现签到</p>\n<!-- more -->\n\n<h3 id=\"签到有什么用\">签到有什么用?</h3>\n<p>目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python</p>\n<h3 id=\"使用说明\">使用说明</h3>\n<h4 id=\"1创建serverless云函数\">1.创建serverless云函数</h4>\n<p>注册腾讯云, 创建一个serverless云函数, 选择空白模板, 运行环境选择Python3\n<figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/06/25/sAat1oY3jTEpSnD.png\" alt=\"2020_0625_1593016738.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"2输入代码\">2.输入代码</h4>\n<p>将下面提供的代码复制到index.py里,目录里好像还有个config.json, 可以删了没什么用\n代码gitee地址:<a href=\"https://gitee.com/Merack/quqiSign\">\nhttps://gitee.com/Merack/quqiSign</a></p>\n<h4 id=\"3修改代码配置\">3.修改代码配置</h4>\n<ol>\n<li>填入账号密码</li>\n<li>修改<code>IS_UPLOAD</code>决定是否要开启文件上传签到功能, 改功能默认开启</li>\n<li>修改<code>parent_id</code>文件上传的目录, 该值默认为0,即根目录<br>下面是获取<code>parent_id</code>的方法<br>首先登陆网页版曲奇云盘, 进入要存放上传文件的文件夹, 比如这里我的文件夹是temp<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/07/07/Gb4A5EvBDR8g3pU.png\" alt=\"2020_0707_1594085154.png\"  data-is-external-image=\"true\"></figure>\n然后观察地址栏URl, URL末尾的数字便是<code>parent_id</code>, 比如图例里的是 88  </li>\n<li>修改好后点击保存</li>\n</ol>\n<h4 id=\"4配置超时时间\">4.配置超时时间</h4>\n<p>因为在执行后需要等待几秒钟曲奇服务器才会记录,直接签到的话会导致逛群组签到这一项失败<br>因此在逛群组签到前我设置了5秒的休眠<br>为了防止在函数在休眠期间就被腾讯云强制停止, 这里需要把函数配置里的超时时间设置成&gt;5s, 我个人的设置是20s<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/06/27/ZtKGTQnfYHu7Ljb.png\" alt=\"2020_0627_1593188640.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"5测试\">5.测试</h4>\n<p>点击”函数代码”, 再点击左下角的测试, 观察执行日志来确认是否执行成功了<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/06/27/4LEAV1o7ry9bgYz.png\" alt=\"success\"  data-is-external-image=\"true\"></figure></p>\n<p> 如果签到过了结果就是如下图<br> <figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/06/27/f9d5NeXiJrIpDxk.png\" alt=\"abc\"  data-is-external-image=\"true\"></figure></p>\n<p> 开启文件上传签到<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/07/07/hifMUaK2TzqgyPs.png\" alt=\"2020_0707_1594052871.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"6定时触发\">6.定时触发</h4>\n<p>创建一个定时触发器\n我的设定是每天00:30执行签到</p>\n<pre><code>0 30 0 * * * *\n</code></pre>\n<p>具体可以根据自己的情况来\n根据 cron表达式文档来就行: <a href=\"https://cloud.tencent.com/document/product/583/9708#cron-.E8.A1.A8.E8.BE.BE.E5.BC.8F\">腾讯官方文档</a>  </p>\n<h4 id=\"7相关说明\">7.相关说明:</h4>\n<p> 1.每天自动上传到云盘里文件是代码仓库里的1.txt,上传文件我写死了就是这个, 不可以自定义.需要自定义的自己修改代码, 我懒得写了<br> 2.第一天会以新文件的方式上传, 后面便是以更新的方式上传了, 也就是文件不会增加 ,永远只有一个, 14字节的txt, 因此不用担心容量问题, 也不用定时来清理<br> 3.每次文件上传都会导致你的<strong>web端的登陆失效,手机端app登陆不受影响</strong>, 因此经常使用web端的网友请自己斟酌是否开启文件上传签到  </p>\n",
-            "author": {
-                "name": "Merack"
-            },
-            "tags": [
-            ],
-            "date_published": "2023-04-28T21:04:38+08:00",
-            "date_modified": "2023-04-28T21:04:38+08:00"
-        },
-        {
-            "id": "https://merack.eu.org/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html",
-            "url": "https://merack.eu.org/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html",
-            "title": "“百度杯”CTF比赛 十一月场 &#x27;小可爱&#x27; writeup(伪)",
-            "summary": "题目内容： 小可爱最喜欢的图片就是它了 tips：txt文件内容即为密码 题目给出了一张图片 附上下载链接: 百度云 1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码 根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E 2.跑py脚本解密&hellip;",
-            "content_html": "<h4 id=\"题目内容：\">题目内容：</h4>\n<p>小可爱最喜欢的图片就是它了\ntips：txt文件内容即为密码</p>\n<!-- more -->\n\n<p>题目给出了一张图片</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/01/07/gwo7T6yKki9IAYe.jpg\" alt=\"wang.4409F5F40438B0C7C4C4E2D9C1883CA4.jpg\"  data-is-external-image=\"true\"></figure></p>\n<p>附上下载链接:\n<a href=\"https://pan.baidu.com/s/1tRHEDzHIzR63-E_BVxDGZg\">百度云</a></p>\n<h4 id=\"writeup\">writeup</h4>\n<p>1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/01/07/V4HOoNRTivWEphX.png\" alt=\"Screenshot_2020-01-07_23-33-22.png\"  data-is-external-image=\"true\"></figure></p>\n<p>根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E</p>\n<p>2.跑py脚本解密</p>\n<p>代码如下(Python2环境)</p>\n<pre><code>from zlib import crc32\nimport random\n\nchar=&#39;0123456789&#39;\n\ndef crc32_f(data):\n    return hex(crc32(data)&amp;0xffffffff)[2:10]\n\nlength=input(&#39;length:&#39;)\ncrc32_=raw_input(&#39;crc32:&#39;).lower()\n\nwhile True:\n    text=&#39;&#39;\n    for i in range(length):\n        text+=char[random.randint(0,len(char)-1)]\n    if crc32_f(text)==crc32_:\n        raw_input(&#39;find it:&#39;+text)\n        exit\n</code></pre>\n<p>脚本运行时需要输入密码长度,这里填8, 然后是CRC密文, 这里填BACAB29E</p>\n<p>接下来就是漫长的等待了,最后跑出密码:34878956</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/01/08/6CJpm4wdR5yanTl.png\" alt=\"Screenshot_2020-01-08_00-54-41.png\"  data-is-external-image=\"true\"></figure></p>\n<p>3.有了密码就可以把压缩包里的图片解压出来了,是一张撕裂成好几部分的二维码, 使用ps拼好或者打印出来裁剪拼好扫描结果应该就是flag了,由于不会ps最终答案你们自己来吧(逃</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.loli.net/2020/01/08/rXsD9d65HxYfeJU.png\" alt=\"qr.png\"  data-is-external-image=\"true\"></figure></p>\n",
-            "author": {
-                "name": "Merack"
-            },
-            "tags": [
-            ],
-            "date_published": "2023-04-28T21:02:51+08:00",
-            "date_modified": "2023-04-28T21:02:51+08:00"
-        },
-        {
             "id": "https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html",
             "url": "https://merack.eu.org/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html",
             "title": "shell编程:输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天",
@@ -50,6 +22,34 @@
             ],
             "date_published": "2021-05-09T21:00:00+08:00",
             "date_modified": "2023-04-30T15:23:34+08:00"
+        },
+        {
+            "id": "https://merack.eu.org/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html",
+            "url": "https://merack.eu.org/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html",
+            "title": "“百度杯”CTF比赛 十一月场 &#x27;小可爱&#x27; writeup(伪)",
+            "summary": "题目内容： 小可爱最喜欢的图片就是它了 tips：txt文件内容即为密码 题目给出了一张图片 附上下载链接: 百度云 1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码 根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E 2.跑py脚本解密&hellip;",
+            "content_html": "<h4 id=\"题目内容：\">题目内容：</h4>\n<p>小可爱最喜欢的图片就是它了\ntips：txt文件内容即为密码</p>\n<!-- more -->\n\n<p>题目给出了一张图片</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JfbJs.jpg\" alt=\"wang.4409F5F40438B0C7C4C4E2D9C1883CA4.jpg\"  data-is-external-image=\"true\"></figure></p>\n<p>附上下载链接:\n<a href=\"https://pan.baidu.com/s/1tRHEDzHIzR63-E_BVxDGZg\">百度云</a></p>\n<h4 id=\"writeup\">writeup</h4>\n<p>1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JhkS1.png\" alt=\"Screenshot_2020-01-07_23-33-22.png\"  data-is-external-image=\"true\"></figure></p>\n<p>根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E</p>\n<p>2.跑py脚本解密</p>\n<p>代码如下(Python2环境)</p>\n<pre><code>from zlib import crc32\nimport random\n\nchar=&#39;0123456789&#39;\n\ndef crc32_f(data):\n    return hex(crc32(data)&amp;0xffffffff)[2:10]\n\nlength=input(&#39;length:&#39;)\ncrc32_=raw_input(&#39;crc32:&#39;).lower()\n\nwhile True:\n    text=&#39;&#39;\n    for i in range(length):\n        text+=char[random.randint(0,len(char)-1)]\n    if crc32_f(text)==crc32_:\n        raw_input(&#39;find it:&#39;+text)\n        exit\n</code></pre>\n<p>脚本运行时需要输入密码长度,这里填8, 然后是CRC密文, 这里填BACAB29E</p>\n<p>接下来就是漫长的等待了,最后跑出密码:34878956</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JhEy6.png\" alt=\"Screenshot_2020-01-08_00-54-41.png\"  data-is-external-image=\"true\"></figure></p>\n<p>3.有了密码就可以把压缩包里的图片解压出来了,是一张撕裂成好几部分的二维码, 使用ps拼好或者打印出来裁剪拼好扫描结果应该就是flag了,由于不会ps最终答案你们自己来吧(逃</p>\n<p><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://i.niupic.com/images/2023/01/01/aev6.png\" alt=\"qr.png\"  data-is-external-image=\"true\"></figure></p>\n",
+            "author": {
+                "name": "Merack"
+            },
+            "tags": [
+            ],
+            "date_published": "2020-06-28T21:02:00+08:00",
+            "date_modified": "2023-05-03T14:44:24+08:00"
+        },
+        {
+            "id": "https://merack.eu.org/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html",
+            "url": "https://merack.eu.org/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html",
+            "title": "使用Python脚本+腾讯云serverless实现曲奇云盘自动签到",
+            "summary": "说明 曲奇云盘每天有3个签到任务, 其中有一个需要上传文加后才能签到, 这个没有实现自动签到现已全部实现签到 目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python 注册腾讯云, 创建一个serverless云函数, 选择空白模板,&hellip;",
+            "content_html": "<h3 id=\"说明\">说明</h3>\n<p>曲奇云盘每天有3个签到任务, <del>其中有一个需要上传文加后才能签到, 这个没有实现自动签到</del>现已全部实现签到</p>\n<!-- more -->\n\n<h3 id=\"签到有什么用\">签到有什么用?</h3>\n<p>目前曲奇云盘的签到是送曲奇豆, 至于曲奇豆有什么用我个人的看法是:没什么卵用, 我写这个脚本只是练习下Python</p>\n<h3 id=\"使用说明\">使用说明</h3>\n<h4 id=\"1创建serverless云函数\">1.创建serverless云函数</h4>\n<p>注册腾讯云, 创建一个serverless云函数, 选择空白模板, 运行环境选择Python3\n<figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JflrT.png\" alt=\"2020_0625_1593016738.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"2输入代码\">2.输入代码</h4>\n<p>将下面提供的代码复制到index.py里,目录里好像还有个config.json, 可以删了没什么用\n代码gitee地址:<a href=\"https://gitee.com/Merack/quqiSign\">\nhttps://gitee.com/Merack/quqiSign</a></p>\n<h4 id=\"3修改代码配置\">3.修改代码配置</h4>\n<ol>\n<li>填入账号密码</li>\n<li>修改<code>IS_UPLOAD</code>决定是否要开启文件上传签到功能, 改功能默认开启</li>\n<li>修改<code>parent_id</code>文件上传的目录, 该值默认为0,即根目录<br>下面是获取<code>parent_id</code>的方法<br>首先登陆网页版曲奇云盘, 进入要存放上传文件的文件夹, 比如这里我的文件夹是temp<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9Jf8ZF.png\" alt=\"2020_0707_1594085154.png\"  data-is-external-image=\"true\"></figure>\n然后观察地址栏URl, URL末尾的数字便是<code>parent_id</code>, 比如图例里的是 88  </li>\n<li>修改好后点击保存</li>\n</ol>\n<h4 id=\"4配置超时时间\">4.配置超时时间</h4>\n<p>因为在执行后需要等待几秒钟曲奇服务器才会记录,直接签到的话会导致逛群组签到这一项失败<br>因此在逛群组签到前我设置了5秒的休眠<br>为了防止在函数在休眠期间就被腾讯云强制停止, 这里需要把函数配置里的超时时间设置成&gt;5s, 我个人的设置是20s<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JfwM6.png\" alt=\"2020_0627_1593188640.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"5测试\">5.测试</h4>\n<p>点击”函数代码”, 再点击左下角的测试, 观察执行日志来确认是否执行成功了<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JfBqO.png\" alt=\"success\"  data-is-external-image=\"true\"></figure></p>\n<p> 如果签到过了结果就是如下图<br> <figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9JfrZD.png\" alt=\"abc\"  data-is-external-image=\"true\"></figure></p>\n<p> 开启文件上传签到<br><figure class=\"post__image\"><img loading=\"lazy\" src=\"https://s1.ax1x.com/2023/05/03/p9Jfsde.png\" alt=\"2020_0707_1594052871.png\"  data-is-external-image=\"true\"></figure></p>\n<h4 id=\"6定时触发\">6.定时触发</h4>\n<p>创建一个定时触发器\n我的设定是每天00:30执行签到</p>\n<pre><code>0 30 0 * * * *\n</code></pre>\n<p>具体可以根据自己的情况来\n根据 cron表达式文档来就行: <a href=\"https://cloud.tencent.com/document/product/583/9708#cron-.E8.A1.A8.E8.BE.BE.E5.BC.8F\">腾讯官方文档</a>  </p>\n<h4 id=\"7相关说明\">7.相关说明:</h4>\n<p> 1.每天自动上传到云盘里文件是代码仓库里的1.txt,上传文件我写死了就是这个, 不可以自定义.需要自定义的自己修改代码, 我懒得写了<br> 2.第一天会以新文件的方式上传, 后面便是以更新的方式上传了, 也就是文件不会增加 ,永远只有一个, 14字节的txt, 因此不用担心容量问题, 也不用定时来清理<br> 3.每次文件上传都会导致你的<strong>web端的登陆失效,手机端app登陆不受影响</strong>, 因此经常使用web端的网友请自己斟酌是否开启文件上传签到  </p>\n",
+            "author": {
+                "name": "Merack"
+            },
+            "tags": [
+            ],
+            "date_published": "2020-06-27T21:04:00+08:00",
+            "date_modified": "2023-05-03T14:43:54+08:00"
         }
     ]
 }
