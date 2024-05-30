@@ -1,3 +1,3 @@
 User-agent: *
 Disallow:
-Sitemap: https://merack.eu.org/sitemap.xml
+Sitemap: https://merack.top/sitemap.xml
