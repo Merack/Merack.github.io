@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
     <title>Merack&#x27;s Home</title>
-    <link href="https://merack.top/feed.xml" rel="self" />
-    <link href="https://merack.top" />
+    <link href="https://blog.merack.top/feed.xml" rel="self" />
+    <link href="https://blog.merack.top" />
     <updated>2024-06-05T10:07:40+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
-    <id>https://merack.top</id>
+    <id>https://blog.merack.top</id>
 
     <entry>
         <title>shell编程:输入一个人的出生日期，计算此人今年多少岁，并计算今天距此人今年生日还有多少天</title>
         <author>
             <name>Merack</name>
         </author>
-        <link href="https://merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html"/>
-        <id>https://merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html</id>
+        <link href="https://blog.merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html"/>
+        <id>https://blog.merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html</id>
 
         <updated>2021-05-09T21:00:00+08:00</updated>
             <summary>
@@ -88,8 +88,8 @@ fi
         <author>
             <name>Merack</name>
         </author>
-        <link href="https://merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html"/>
-        <id>https://merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html</id>
+        <link href="https://blog.merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html"/>
+        <id>https://blog.merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html</id>
 
         <updated>2020-06-28T21:02:00+08:00</updated>
             <summary>
@@ -133,8 +133,8 @@ while True:
         <author>
             <name>Merack</name>
         </author>
-        <link href="https://merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html"/>
-        <id>https://merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html</id>
+        <link href="https://blog.merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html"/>
+        <id>https://blog.merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html</id>
 
         <updated>2020-06-27T21:04:00+08:00</updated>
             <summary>

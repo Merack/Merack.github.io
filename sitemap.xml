@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://merack.top/sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://blog.merack.top/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 <url>
-<loc>https://merack.top/</loc>
+<loc>https://blog.merack.top/</loc>
 </url>
 <url>
-<loc>https://merack.top/about.html</loc>
+<loc>https://blog.merack.top/about.html</loc>
 <lastmod>2024-05-31T19:11:55+08:00</lastmod>
 </url>
 <url>
-<loc>https://merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html</loc>
+<loc>https://blog.merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html</loc>
 <lastmod>2024-06-05T10:07:40+08:00</lastmod>
 </url>
 <url>
-<loc>https://merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html</loc>
+<loc>https://blog.merack.top/shellbian-chengshu-ru-yi-ge-ren-de-chu-sheng-ri-qiji-suan-ci-ren-jin-nian-duo-shao-suibing-ji-suan-jin-tian-ju-ci-ren-jin-nian-sheng-ri-huan-you-duo-shao-tian.html</loc>
 <lastmod>2023-04-30T15:23:34+08:00</lastmod>
 </url>
 <url>
-<loc>https://merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html</loc>
+<loc>https://blog.merack.top/shi-yong-pythonjiao-ben-teng-xun-yun-serverlessshi-xian-qu-qi-yun-pan-zi-dong-qian-dao.html</loc>
 <lastmod>2024-05-30T23:11:24+08:00</lastmod>
 </url>
 </urlset>
