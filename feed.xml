@@ -3,7 +3,7 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://blog.merack.top/feed.xml" rel="self" />
     <link href="https://blog.merack.top" />
-    <updated>2024-06-07T21:26:39+08:00</updated>
+    <updated>2024-06-07T22:12:30+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
@@ -33,7 +33,7 @@
 <h2 data-heading="必备条件">必备条件</h2>
 <ol>
 <li>已经备案的域名(国内的CDN厂商基本都要求)</li>
-<li>又拍云账号: [点我注册](https://console.upyun.com/register/?invite=SJxy8d1Sw), 注册完毕后可以到 [又拍云联盟](https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral)页面按要求申请开发者每月免费配额, 一般在自己网站挂一个又拍云的logo然后提交申请就可以了.需要注意的是, 当前你的网站是要有一定内容的不然不会通过(实测我的博客就发了三篇文章就申请通过了).</li>
+<li>又拍云账号: <a href="https://console.upyun.com/register/?invite=SJxy8d1Sw" target="_blank" rel="noopener noreferrer">点我注册</a>, 注册完毕后可以到 <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank" rel="noopener noreferrer">又拍云联盟</a>页面按要求申请开发者每月免费配额, 一般在自己网站挂一个又拍云的logo然后提交申请就可以了.需要注意的是, 当前你的网站是要有一定内容的不然不会通过(实测我的博客就发了三篇文章就申请通过了).</li>
 </ol>
 <h2 data-heading="简要配置">简要配置</h2>
 <h3 data-heading="GitHub Pages设置">GitHub Pages设置</h3>
@@ -60,7 +60,7 @@
 <h5>其他配置与注意事项</h5>
 <ol>
 <li>其他的配置按需求点点就行, 需要注意的是我看到一些资料说HTTP 302 调度这个功能可能会造成一些问题, 建议不开这个. </li>
-<li>如果要开源站资源迁移这个功能, 需要配合缓存配置中将资源缓存时间配置为24小时以上才会触发迁移. 如果要验证缓存时间可以通过浏览器的开发者工具检查响应头的Cache-Control字段, 具体可以看[又拍云的这个文档](https://docs.upyun.com/cdn/guide/#_6). 不过, 除非你了解[源站资源迁移的访问机制](https://help.upyun.com/knowledge-base/cdn-source-resource-move/), 否则不建议开启, 会对资源更新造成一些问题.</li>
+<li>如果要开源站资源迁移这个功能, 需要配合缓存配置中将资源缓存时间配置为24小时以上才会触发迁移. 如果要验证缓存时间可以通过浏览器的开发者工具检查响应头的Cache-Control字段, 具体可以看<a href="https://docs.upyun.com/cdn/guide/#_6">又拍云的这个文档</a>. 不过, 除非你了解<a href="https://help.upyun.com/knowledge-base/cdn-source-resource-move/">源站资源迁移的访问机制</a>, 否则不建议开启, 会对资源更新造成一些问题.</li>
 </ol>
 <h2>结语</h2>
 <p>到此又拍云CDN加速GitHub Pages就配置完成了, 本文只是我配置时的一些简要记录, 仅供参考. 如果遇到问题可以通过邮件与我交流. 像其他的一些静态网站加速, 例如GitLab, Vercel, Netlify, Cloudflare Pages, 思路应该也大致相同, 但还是要根据不同平台调整.</p>
