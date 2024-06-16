@@ -3,12 +3,47 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://blog.merack.top/feed.xml" rel="self" />
     <link href="https://blog.merack.top" />
-    <updated>2024-06-07T22:12:30+08:00</updated>
+    <updated>2024-06-16T23:39:40+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
     <id>https://blog.merack.top</id>
 
+    <entry>
+        <title>Ubuntu24.04安装MySQL8.0遇到的一些问题: 数据库root账户设置密码无效, root账户无需密码或密码错误都可登录 以及其他操作记录</title>
+        <author>
+            <name>Merack</name>
+        </author>
+        <link href="https://blog.merack.top/ubuntu2404an-zhuang-mysql80yu-dao-de-yi-xie-wen-ti-shu-ju-ku-rootzhang-hu-she-zhi-mi-ma-wu-xiao-rootzhang-hu-wu-xu-mi-ma-huo-mi-ma-cuo-wu-du-ke-deng-lu-yi-ji-qi-ta-cao-zuo-ji-lu.html"/>
+        <id>https://blog.merack.top/ubuntu2404an-zhuang-mysql80yu-dao-de-yi-xie-wen-ti-shu-ju-ku-rootzhang-hu-she-zhi-mi-ma-wu-xiao-rootzhang-hu-wu-xu-mi-ma-huo-mi-ma-cuo-wu-du-ke-deng-lu-yi-ji-qi-ta-cao-zuo-ji-lu.html</id>
+            <category term="Linux"/>
+
+        <updated>2024-06-16T23:06:31+08:00</updated>
+            <summary>
+                <![CDATA[
+                    Ubuntu24.04使用apt-get安装MySQL8.0后发现数据库的root账户竟然不用密码也能登录尝试随便输入一个密码也能登录, 使用 ALTER USER 'root'@'localhost' IDENTIFIED BY 'new passwd'; 语句修改密码后问题依然存在,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>Ubuntu24.04使用apt-get安装MySQL8.0后发现数据库的root账户竟然不用密码也能登录<figure class="alignnone size-full wp-image-41"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0616_21-04-26.png" alt="" width="708" height="279" data-is-external-image="true"></figure>尝试随便输入一个密码也能登录, 使用 ALTER USER 'root'@'localhost' IDENTIFIED BY 'new passwd'; 语句修改密码后问题依然存在, 以前使用MySQL5.7并未发现相关的问题.</p>
+<h3>原因</h3>
+<p>通过查找资料发现是MySQL8.0开始更改了root账户的默认密码验证插件为<a href="https://dev.mysql.com/doc/mysql-secure-deployment-guide/8.0/en/secure-deployment-configure-authentication.html">auth_socket</a>导致的, 可以通过一下命令查看数据库中的用户使用的身份验证插件:</p>
+<pre>SELECT user, host, plugin FROM mysql.user;</pre>
+<figure class="alignnone size-full wp-image-43"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0616_21-32-04.png" alt="" width="535" height="254" data-is-external-image="true"></figure><br>可以看到root使用的身份验证插件是auth_socket, 其他用户默认是caching_sha2_password. auth_socket这个插件是通过Unix socket文件来进行身份验证, 简单来说就是你在Linux系统的登录名为root, 那么当登录数据库的root账号时数据库会与系统进行socket通信, 发现要登录的用户名是相同的, 那么就会允许这次登录, 详细信息可以看MySQL的官方文档: <a href="https://dev.mysql.com/doc/mysql-secure-deployment-guide/8.0/en/secure-deployment-configure-authentication.html">auth_socket</a> 以及这篇文章: <a href="https://segmentfault.com/a/1190000039860881">https://segmentfault.com/a/1190000039860881</a><br>MySQL8.0以上将其作为root的默认身份插件有一定的道理, 首先, Unix socket通信只能是在本机的程序之间进行, 不会通过TCP/IP网络栈, 不用当心来自外部的爆破;  二是Linux本身的身份验证已经很完善, 用户如果能以root登录系统, 那么无论使用何种插件都能被轻易地修改密码.</p>
+<h3>更改身份验证插件</h3>
+<p>如果想用账户密码方式的身份验证, 可以通过以下语句更改, WITH 后面是身份验证插件名称, BY 后面是登录密码:</p>
+<pre>ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'new password';</pre>
+<figure class="alignnone size-full wp-image-43"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0616_21-53-04.png" alt="" width="797" height="323" data-is-external-image="true"></figure>
+<p>可以看到root的身份验证插件已经改为caching_sha2_password<br>改完以后需要提供正确的密码才能登录<figure class="alignnone size-full wp-image-44"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0616_21-56-15.png" alt="" width="768" height="98" data-is-external-image="true"></figure>需要注意的是, 有一些文章WITH 后面跟的是mysql_native_password, 但是根据官方文档: <a href="https://dev.mysql.com/doc/refman/8.0/en/native-pluggable-authentication.html">https://dev.mysql.com/doc/refman/8.0/en/native-pluggable-authentication.html</a> 中的描述, mysql_native_password插件会在MySQL 8.0.34中弃用并且在后续版本中删除, 官方更推荐caching_sha2_password, 具有更好的安全性.</p>
+<h3>mysql_secure_installation</h3>
+<p>实际上根据MySQL官方文档中安装步骤的安装后的设置与测试一节中(<a href="https://dev.mysql.com/doc/refman/8.0/en/postinstallation.html">Postinstallation Setup and Testing</a> )的<a href="https://dev.mysql.com/doc/refman/8.0/en/default-privileges.html">Securing the Initial MySQL Account</a> 提到了mysql_secure_installation这个程序, 他随MySQL一同安装, 用于对MySQL安装后, 上线前的安全初始化,其中主要包括以下功能:<br>1. 为root账户设置密码;<br>2. 禁止root账户远程访问;<br>3. 删除匿名账户;<br>4. 删除test数据库;</p>
+<p>如果你安装完MySQL后运行这个程序, 就能发现问题所在, 程序提示root用户正在使用auth_socket, 因此跳过密码设置, 所以平时还是要多看看文档^_^<figure class="alignnone size-full wp-image-45"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0616_22-45-39.png" alt="" width="1023" height="320" data-is-external-image="true"></figure>
+<h3>内存优化</h3>
+<p>如果你的主机内存很小, 那么建议修改MySQL配置文件, 在 [mysqld] 下添加:<br><code>performance_schema = off</code><br>亲测可以减少100多M的内存, <code>performance_schema</code> 是用来记录MySQL查询性能相关的记录, 用于给数据库管理员做性能分析的, 如果你没有这方面的需求, 那么可以关闭它.</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>用又拍云作为CDN加速GitHub Pages简要配置记录</title>
         <author>
@@ -20,15 +55,13 @@
         <updated>2024-06-07T20:56:06+08:00</updated>
             <summary>
                 <![CDATA[
-                    <h2 data-heading="引言">引言</h2>
-<p>GitHub Pages为GitHub上的项目提供主页托管功能, 我们可以用它来托管我们的静态网站. 但是由于GitHub Pages服务器在国外, 因此在国内的访问速度可能不太理想.但是我们可以通过CDN来加速它的访问速度. 正巧又拍云推出了开发者计划, 为开发者提供每月10G的云存储和15G的CDN流量, 对于个人网站来说已经足够了. 下面是我为GitHub Pages配置又拍云CDN加速的一些简要配置记录.</p>
+                    <p>GitHub Pages为GitHub上的项目提供主页托管功能, 我们可以用它来托管我们的静态网站. 但是由于GitHub Pages服务器在国外, 因此在国内的访问速度可能不太理想.但是我们可以通过CDN来加速它的访问速度. 正巧又拍云推出了开发者计划, 为开发者提供每月10G的云存储和15G的CDN流量, 对于个人网站来说已经足够了. 下面是我为GitHub Pages配置又拍云CDN加速的一些简要配置记录.</p>
 
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
-                <h2 data-heading="引言">引言</h2>
-<p>GitHub Pages为GitHub上的项目提供主页托管功能, 我们可以用它来托管我们的静态网站. 但是由于GitHub Pages服务器在国外, 因此在国内的访问速度可能不太理想.但是我们可以通过CDN来加速它的访问速度. 正巧又拍云推出了开发者计划, 为开发者提供每月10G的云存储和15G的CDN流量, 对于个人网站来说已经足够了. 下面是我为GitHub Pages配置又拍云CDN加速的一些简要配置记录.</p>
+                <p>GitHub Pages为GitHub上的项目提供主页托管功能, 我们可以用它来托管我们的静态网站. 但是由于GitHub Pages服务器在国外, 因此在国内的访问速度可能不太理想.但是我们可以通过CDN来加速它的访问速度. 正巧又拍云推出了开发者计划, 为开发者提供每月10G的云存储和15G的CDN流量, 对于个人网站来说已经足够了. 下面是我为GitHub Pages配置又拍云CDN加速的一些简要配置记录.</p>
 
 <h2 data-heading="必备条件">必备条件</h2>
 <ol>
@@ -61,6 +94,7 @@
 <ol>
 <li>其他的配置按需求点点就行, 需要注意的是我看到一些资料说HTTP 302 调度这个功能可能会造成一些问题, 建议不开这个. </li>
 <li>如果要开源站资源迁移这个功能, 需要配合缓存配置中将资源缓存时间配置为24小时以上才会触发迁移. 如果要验证缓存时间可以通过浏览器的开发者工具检查响应头的Cache-Control字段, 具体可以看<a href="https://docs.upyun.com/cdn/guide/#_6">又拍云的这个文档</a>. 不过, 除非你了解<a href="https://help.upyun.com/knowledge-base/cdn-source-resource-move/">源站资源迁移的访问机制</a>, 否则不建议开启, 会对资源更新造成一些问题.</li>
+<li>请勿给根域名(即不带任何前缀, 主机记录为@的那个域名 )做CNAME解析(例如, 不能为merack.top添加又拍云的CNAME记录), 因为根据<a href="https://datatracker.ietf.org/doc/html/rfc1912">RFC1912</a>，域名根域名不得存在 CNAME 记录，根域名的 CNAME 记录会与域名的 MX 邮箱记录、TXT 域名验证记录发生冲突。如果你使用Cloudflare托管你的域名, Cloudflare会将该CNAME记录展平(<a href="https://developers.cloudflare.com/dns/cname-flattening/">CNAME flattening</a>), 指向的是又拍云在国外的某个节点, 无论国内国外访问都是请求的这个节点的资源, 那么这就失去了CDN的功能.<br><a href="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0605_11-58-14.png"><figure class="alignnone size-full wp-image-40"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2024/06/screenshot_2024_0605_11-58-14.png" alt="" width="1238" height="150" data-is-external-image="true"></figure></a></li>
 </ol>
 <h2>结语</h2>
 <p>到此又拍云CDN加速GitHub Pages就配置完成了, 本文只是我配置时的一些简要记录, 仅供参考. 如果遇到问题可以通过邮件与我交流. 像其他的一些静态网站加速, 例如GitLab, Vercel, Netlify, Cloudflare Pages, 思路应该也大致相同, 但还是要根据不同平台调整.</p>
