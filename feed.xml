@@ -3,7 +3,7 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://blog.merack.top/feed.xml" rel="self" />
     <link href="https://blog.merack.top" />
-    <updated>2024-12-03T16:28:00+08:00</updated>
+    <updated>2024-12-04T18:10:54+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
@@ -202,6 +202,26 @@
 </ol>
 <h2>结语</h2>
 <p>到此又拍云CDN加速GitHub Pages就配置完成了, 本文只是我配置时的一些简要记录, 仅供参考. 如果遇到问题可以通过邮件与我交流. 像其他的一些静态网站加速, 例如GitLab, Vercel, Netlify, Cloudflare Pages, 思路应该也大致相同, 但还是要根据不同平台调整.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>新的开始</title>
+        <author>
+            <name>Merack</name>
+        </author>
+        <link href="https://blog.merack.top/xin-de-kai-shi.html"/>
+        <id>https://blog.merack.top/xin-de-kai-shi.html</id>
+
+        <updated>2024-04-05T17:10:00+08:00</updated>
+            <summary>
+                <![CDATA[
+                    最近托管在某云服务商上的服务器到期了, 在做数据迁移时顺便回看了之前发的博客, 发现了之前的很多文章质量很低: 1. 最早是从17年开始写文章, 当时写了好几篇分享破解软件的, 那些文章涉及版权问题而且有时效性, 现在基本已经不能用了. 2. 有些文章是自学编程语言和一些框架时写的,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>最近托管在某云服务商上的服务器到期了, 在做数据迁移时顺便回看了之前发的博客, 发现了之前的很多文章质量很低:<br><br>1. 最早是从17年开始写文章, 当时写了好几篇分享破解软件的, 那些文章涉及版权问题而且有时效性, 现在基本已经不能用了.<br><br>2. 有些文章是自学编程语言和一些框架时写的, 只是将官方文档里有的内容又说一遍, 没什么营养. 当时还没学会去看文档, 遇到什么概念不清楚就去网上搜然后摘抄过来, 现在我基本上是看官方文档+本地笔记软件obsidian记笔记结合.<br><br>3. 还有一些文章记录的是我在编程时遇到的各种问题, 这些问题很常见并且在网上一搜就能轻松搜到很多雷同的文章. 实际上这些文章里的解决方法我也是搜索得来, 里面缺少自己的思考.<br><br>于是趁着这次数据迁移的机会, 一并把这些"问题文章"清理了. 希望让这篇文章成为一个新的开始, 今后写一些自己实践过的, 带有自己思考的东西.</p>
             ]]>
         </content>
     </entry>
