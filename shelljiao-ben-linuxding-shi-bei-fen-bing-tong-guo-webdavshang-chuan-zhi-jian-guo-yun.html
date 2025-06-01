@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>shell脚本 - Linux定时备份并通过WebDAV上传至坚果云 - Merack&#x27;s Home</title><meta name="description" content="为了保证数据的安全与完整, 对Linux上的重要数据和配置进行备份是很必要的, 备份文件最好在本地存一份, 上传到云服务一份. 我的服务器上的数据比较少, 打包压缩完大概是100M左右, 思来想去打算用WebDAV的方式传到坚果云. 坚果云存储空间不限量但是普通用户每月的上传流量限制是1G, 对我来说是绰绰有余了. 保存以下sh代码,&hellip;"><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://blog.merack.top/shelljiao-ben-linuxding-shi-bei-fen-bing-tong-guo-webdavshang-chuan-zhi-jian-guo-yun.html"><link rel="alternate" type="application/atom+xml" href="https://blog.merack.top/feed.xml" title="Merack&#x27;s Home - RSS"><link rel="alternate" type="application/json" href="https://blog.merack.top/feed.json" title="Merack&#x27;s Home - JSON"><link rel="shortcut icon" href="https://blog.merack.top/media/website/favicon-16x16.png" type="image/png"><link rel="stylesheet" href="https://blog.merack.top/assets/css/style.css"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.merack.top/shelljiao-ben-linuxding-shi-bei-fen-bing-tong-guo-webdavshang-chuan-zhi-jian-guo-yun.html"},"headline":"shell脚本 - Linux定时备份并通过WebDAV上传至坚果云","datePublished":"2025-06-01T17:38+08:00","dateModified":"2025-06-01T17:38+08:00","description":"为了保证数据的安全与完整, 对Linux上的重要数据和配置进行备份是很必要的, 备份文件最好在本地存一份, 上传到云服务一份. 我的服务器上的数据比较少, 打包压缩完大概是100M左右, 思来想去打算用WebDAV的方式传到坚果云. 坚果云存储空间不限量但是普通用户每月的上传流量限制是1G, 对我来说是绰绰有余了. 保存以下sh代码,&hellip;","author":{"@type":"Person","name":"Merack","url":"https://blog.merack.top/authors/merack/"},"publisher":{"@type":"Organization","name":"Merack"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="post-template"><header class="top js-header"><a class="logo" href="https://blog.merack.top/">Merack&#x27;s Home</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://blog.merack.top/about.html" target="_self">About</a></li></ul></nav></header><main class="post"><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>shell脚本 - Linux定时备份并通过WebDAV上传至坚果云</h1><div class="feed__meta content__meta"><img src="https://blog.merack.top/media/website/qbanjinmuyan_Kan-Tu-Wang.web-2.png" loading="eager" height="500" width="458" class="feed__author-thumb" alt="Merack"> <a href="https://blog.merack.top/authors/merack/" class="feed__author">Merack</a> <time datetime="2025-06-01T17:38" class="feed__date">June 1, 2025</time></div></div></header></div><div class="entry-wrapper content__entry"><p>为了保证数据的安全与完整, 对Linux上的重要数据和配置进行备份是很必要的, 备份文件最好在本地存一份, 上传到云服务一份. 我的服务器上的数据比较少, 打包压缩完大概是100M左右, 思来想去打算用WebDAV的方式传到坚果云. <a href="https://www.jianguoyun.com/">坚果云</a>存储空间不限量但是普通用户每月的上传流量限制是1G, 对我来说是绰绰有余了.</p><h2>准备</h2><ol><li>坚果云账号, 在网页端右上角 账户信息 -&gt; <a href="https://www.jianguoyun.com/d/home#/safety">安全选项</a> 里添加一个应用, 记住生成的WebDAV密码, 账户, WebDAV服务器地址</li><li>根据 <a href="https://www.cnblogs.com/misterh/p/9830905.html">这篇文章</a>(https://www.cnblogs.com/misterh/p/9830905.html) 安装cadaver, 并配置非交互式登录</li></ol><h2>代码</h2><p>保存以下sh代码, 根据你的情况修改directories, db_user, db_password, db_names, backup_file等变量</p><pre class="EnlighterJSRAW" data-enlighter-language="bash">#!/bin/bash
+
+# 定义要备份的目录
+directories=("/etc/nginx" "/opt" "/var/www")
+
+# 定义数据库账户密码
+db_user="user"
+db_password="passwd"
+# 定义要备份的数据库名称列表
+db_names=("mydb")
+DATE=$(date +%Y%m%d)
+# 定义生成的备份文件名,以日期命名
+backup_file="backup_${DATE}.tar.gz"
+
+# 输出当前时间和开始信息
+start_time=$(date +%s)
+echo "======================Backup started at $(date)========================="
+
+# 创建一个临时目录来存放SQL文件
+temp_dir="temp_backup"
+mkdir ${temp_dir}
+
+# 导出每个数据库到SQL文件
+for db_name in "${db_names[@]}"; do
+    sql_file="${temp_dir}/${db_name}.sql"
+    mysqldump -u ${db_user} -p${db_password} ${db_name} &gt;${sql_file}
+done
+
+# 将目录和SQL文件添加到备份中
+tar -czf ${backup_file} --transform 's,^,backup/,' "${directories[@]}" -C ${temp_dir} .
+
+# 删除临时目录及其中的SQL文件
+rm -rf ${temp_dir}
+
+# 计算并输出耗时
+end_time=$(date +%s)
+elapsed_time=$((end_time - start_time))
+
+# 获取备份文件的大小
+backup_file_size=$(stat --format "%s" ${backup_file})
+
+# 输出完成信息、备份文件大小和耗时
+echo "Backup completed. File: ${backup_file}, Size:$(numfmt --to=iec-i --suffix=B ${backup_file_size})"
+
+# WebDav上传, 路径中的serverBackup要求是坚果云上已创建好的文件夹, 也可以不填最后这个路径, 则是上传到根目录
+echo "Uploading..."
+cadaver https://dav.jianguoyun.com/dav/serverBackup &lt;&lt; EOF
+put ${backup_file}
+quit
+EOF
+echo "Upload Done! "
+
+echo "Elapsed time: ${elapsed_time} seconds"
+echo "===================== Backup Done at $(date)================================="
+</pre><figure class="alignnone size-full wp-image-187">通过<code>bash backup.sh</code> 测试一下, 如果没问题就可以进行下一步了 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/88f8cca6-9d32-3edc-76f4-60b98984dc5c.png"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2025/06/88f8cca6-9d32-3edc-76f4-60b98984dc5c.png" alt="" width="960" height="327" data-is-external-image="true"></a></figure><p></p><h2>设定crontab定时任务</h2><p>让脚本每周一凌晨3点定时运行并输出日志到指定文件</p><pre>0 3 * * 1 /root/backup.sh &gt;&gt; /opt/log/backup.log</pre><figure class="alignnone size-full wp-image-188">关于crontab更多写法请自行查找吧 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/169908cf-306f-66d8-c99d-94c6725decef.png"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2025/06/169908cf-306f-66d8-c99d-94c6725decef.png" alt="" width="1422" height="504" data-is-external-image="true"></a></figure><p></p><h2>扩展</h2><p>如果你的备份文件比较大, 坚果云的免费流量无法满足你的要求, 可以考虑使用各云服务商的对象存储, 看了七牛, 阿里, 腾讯的都不是很贵, 也提供了shell上传的示例代码. 如果你的服务器在国外, 那么像Amazon, Cloudflare等国外云服务商的对象存储貌似更加便宜.</p></div><footer class="content__footer"><div class="entry-wrapper"><div class="content__actions"><ul class="content__tag"><li><a href="https://blog.merack.top/tags/linux/">Linux</a></li></ul></div></div><nav class="content__nav"><div class="wrapper"><div class="content__nav-inner"><div class="content__nav-prev"><a href="https://blog.merack.top/shi-yong-cloudflare-workerjia-su-cloudflare-r2fang-wen-su-du.html" class="content__nav-link" rel="prev"><div><span>Previous</span> 使用Cloudflare worker加速Cloudflare R2访问速度</div></a></div></div></div></nav></footer></article></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><p>Powered by Publii</p><div style="flex; align-items: center; justify-content: center;"><a href="https://cloudflare.com/"><img src="https://cdn.merack.top/wp-content/uploads/2024/12/ae2e8d68-158b-1842-fc34-0ebcc1365d6c.png" alt="cloudflare"> </a><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral"><img style="margin-right: 1px; vertical-align: middle;" src="https://cdn.merack.top/wp-content/uploads/2024/12/8a9de8d6-7a3c-e553-b074-cf653f15d712.png" alt="upyun"> </a><a href="https://cloudflare.com/">提供CDN服务</a></div></div><button onclick="backToTopFunction()" id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="https://blog.merack.top/assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="https://blog.merack.top/assets/js/scripts.min.js"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'overlay',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>

@@ -3,12 +3,102 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://blog.merack.top/feed.xml" rel="self" />
     <link href="https://blog.merack.top" />
-    <updated>2025-03-17T01:50:36+08:00</updated>
+    <updated>2025-06-01T17:38:27+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
     <id>https://blog.merack.top</id>
 
+    <entry>
+        <title>shell脚本 - Linux定时备份并通过WebDAV上传至坚果云</title>
+        <author>
+            <name>Merack</name>
+        </author>
+        <link href="https://blog.merack.top/shelljiao-ben-linuxding-shi-bei-fen-bing-tong-guo-webdavshang-chuan-zhi-jian-guo-yun.html"/>
+        <id>https://blog.merack.top/shelljiao-ben-linuxding-shi-bei-fen-bing-tong-guo-webdavshang-chuan-zhi-jian-guo-yun.html</id>
+            <category term="Linux"/>
+
+        <updated>2025-06-01T17:38:27+08:00</updated>
+            <summary>
+                <![CDATA[
+                    为了保证数据的安全与完整, 对Linux上的重要数据和配置进行备份是很必要的, 备份文件最好在本地存一份, 上传到云服务一份. 我的服务器上的数据比较少, 打包压缩完大概是100M左右, 思来想去打算用WebDAV的方式传到坚果云. 坚果云存储空间不限量但是普通用户每月的上传流量限制是1G, 对我来说是绰绰有余了. 保存以下sh代码,&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <p>为了保证数据的安全与完整, 对Linux上的重要数据和配置进行备份是很必要的, 备份文件最好在本地存一份, 上传到云服务一份. 我的服务器上的数据比较少, 打包压缩完大概是100M左右, 思来想去打算用WebDAV的方式传到坚果云. <a href="https://www.jianguoyun.com/">坚果云</a>存储空间不限量但是普通用户每月的上传流量限制是1G, 对我来说是绰绰有余了.</p>
+<h2>准备</h2>
+<ol>
+<li>坚果云账号, 在网页端右上角 账户信息 -&gt; <a href="https://www.jianguoyun.com/d/home#/safety">安全选项</a> 里添加一个应用, 记住生成的WebDAV密码, 账户, WebDAV服务器地址</li>
+<li>根据 <a href="https://www.cnblogs.com/misterh/p/9830905.html">这篇文章</a>(https://www.cnblogs.com/misterh/p/9830905.html) 安装cadaver, 并配置非交互式登录</li>
+</ol>
+<h2>代码</h2>
+<p>保存以下sh代码, 根据你的情况修改directories, db_user, db_password, db_names, backup_file等变量</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="bash">#!/bin/bash
+
+# 定义要备份的目录
+directories=("/etc/nginx" "/opt" "/var/www")
+
+# 定义数据库账户密码
+db_user="user"
+db_password="passwd"
+# 定义要备份的数据库名称列表
+db_names=("mydb")
+DATE=$(date +%Y%m%d)
+# 定义生成的备份文件名,以日期命名
+backup_file="backup_${DATE}.tar.gz"
+
+# 输出当前时间和开始信息
+start_time=$(date +%s)
+echo "======================Backup started at $(date)========================="
+
+# 创建一个临时目录来存放SQL文件
+temp_dir="temp_backup"
+mkdir ${temp_dir}
+
+# 导出每个数据库到SQL文件
+for db_name in "${db_names[@]}"; do
+    sql_file="${temp_dir}/${db_name}.sql"
+    mysqldump -u ${db_user} -p${db_password} ${db_name} &gt;${sql_file}
+done
+
+# 将目录和SQL文件添加到备份中
+tar -czf ${backup_file} --transform 's,^,backup/,' "${directories[@]}" -C ${temp_dir} .
+
+# 删除临时目录及其中的SQL文件
+rm -rf ${temp_dir}
+
+# 计算并输出耗时
+end_time=$(date +%s)
+elapsed_time=$((end_time - start_time))
+
+# 获取备份文件的大小
+backup_file_size=$(stat --format "%s" ${backup_file})
+
+# 输出完成信息、备份文件大小和耗时
+echo "Backup completed. File: ${backup_file}, Size:$(numfmt --to=iec-i --suffix=B ${backup_file_size})"
+
+# WebDav上传, 路径中的serverBackup要求是坚果云上已创建好的文件夹, 也可以不填最后这个路径, 则是上传到根目录
+echo "Uploading..."
+cadaver https://dav.jianguoyun.com/dav/serverBackup &lt;&lt; EOF
+put ${backup_file}
+quit
+EOF
+echo "Upload Done! "
+
+echo "Elapsed time: ${elapsed_time} seconds"
+echo "===================== Backup Done at $(date)================================="
+</pre>
+<figure class="alignnone size-full wp-image-187">通过<code>bash backup.sh</code> 测试一下, 如果没问题就可以进行下一步了 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/88f8cca6-9d32-3edc-76f4-60b98984dc5c.png"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2025/06/88f8cca6-9d32-3edc-76f4-60b98984dc5c.png" alt="" width="960" height="327" data-is-external-image="true"></figure></a></p>
+<h2>设定crontab定时任务</h2>
+<p>让脚本每周一凌晨3点定时运行并输出日志到指定文件</p>
+<pre>0 3 * * 1 /root/backup.sh &gt;&gt; /opt/log/backup.log</pre>
+<figure class="alignnone size-full wp-image-188">关于crontab更多写法请自行查找吧 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/169908cf-306f-66d8-c99d-94c6725decef.png"><img loading="lazy"  src="https://cdn.merack.top/wp-content/uploads/2025/06/169908cf-306f-66d8-c99d-94c6725decef.png" alt="" width="1422" height="504" data-is-external-image="true"></figure></a></p>
+<h2>扩展</h2>
+<p>如果你的备份文件比较大, 坚果云的免费流量无法满足你的要求, 可以考虑使用各云服务商的对象存储, 看了七牛, 阿里, 腾讯的都不是很贵, 也提供了shell上传的示例代码. 如果你的服务器在国外, 那么像Amazon, Cloudflare等国外云服务商的对象存储貌似更加便宜.</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>使用Cloudflare worker加速Cloudflare R2访问速度</title>
         <author>
@@ -475,54 +565,7 @@ else
     echo &quot;Your next birthday is: $nextBirthday and $interval days left&quot;
 fi
 </code></pre>
-<p>运行结果:<br><figure class="post__image"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2021/05/790caf37116577e34a9d4e311f7faca8.png" alt="pic1.png"  data-is-external-image="true"></figure></p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>“百度杯”CTF比赛 十一月场 &#x27;小可爱&#x27; writeup(伪)</title>
-        <author>
-            <name>Merack</name>
-        </author>
-        <link href="https://blog.merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html"/>
-        <id>https://blog.merack.top/bai-du-beictfbi-sai-shi-yi-yue-chang-xiao-ke-ai-writeupwei.html</id>
-            <category term="CTF"/>
-
-        <updated>2020-06-28T21:02:00+08:00</updated>
-            <summary>
-                <![CDATA[
-                    题目内容： 小可爱最喜欢的图片就是它了 tips：txt文件内容即为密码 题目给出了一张图片 附上下载链接: 百度云 1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码 根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E 2.跑py脚本解密&hellip;
-                ]]>
-            </summary>
-        <content type="html">
-            <![CDATA[
-                <h4 id="题目内容：">题目内容：</h4>
-<p>小可爱最喜欢的图片就是它了
-tips：txt文件内容即为密码</p><!-- more -->
-
-<p>题目给出了一张图片</p><figure class="post__image"><img loading="lazy" src="https://s1.ax1x.com/2023/05/03/p9JfbJs.jpg" alt="wang.4409F5F40438B0C7C4C4E2D9C1883CA4.jpg"  data-is-external-image="true"></figure><p>附上下载链接:
-<a href="https://pan.baidu.com/s/1tRHEDzHIzR63-E_BVxDGZg">百度云</a></p><h4 id="writeup">writeup</h4>
-<p>1.把文件后缀改成rar,发现是一个可以打开的压缩包,不过需要密码</p><figure class="post__image"><img loading="lazy" src="https://s1.ax1x.com/2023/05/03/p9JhkS1.png" alt="Screenshot_2020-01-07_23-33-22.png"  data-is-external-image="true"></figure><p>根据题目提示,txt文件里面的内容是密码,而txt文件名提示我们密码是8位数字, 解题的思路是通过CRC32检测来爆破txt里面的内容,从上图中我们可以看到txt的CRC32值为BACAB29E</p><p>2.跑py脚本解密</p><p>代码如下(Python2环境)</p><pre><code>from zlib import crc32
-import random
-
-char=&#39;0123456789&#39;
-
-def crc32_f(data):
-    return hex(crc32(data)&amp;0xffffffff)[2:10]
-
-length=input(&#39;length:&#39;)
-crc32_=raw_input(&#39;crc32:&#39;).lower()
-
-while True:
-    text=&#39;&#39;
-    for i in range(length):
-        text+=char[random.randint(0,len(char)-1)]
-    if crc32_f(text)==crc32_:
-        raw_input(&#39;find it:&#39;+text)
-        exit
-</code></pre>
-<p>脚本运行时需要输入密码长度,这里填8, 然后是CRC密文, 这里填BACAB29E</p><p>接下来就是漫长的等待了,最后跑出密码:34878956</p><figure class="post__image"><img loading="lazy" src="https://s1.ax1x.com/2023/05/03/p9JhEy6.png" alt="Screenshot_2020-01-08_00-54-41.png"  data-is-external-image="true"></figure><p>3.有了密码就可以把压缩包里的图片解压出来了,是一张撕裂成好几部分的二维码, 使用ps拼好或者打印出来裁剪拼好扫描结果应该就是flag了,由于不会ps最终答案你们自己来吧(逃
-<figure class="post__image"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2020/06/qr.png" alt="qrcode"  data-is-external-image="true"></figure></p>
+<p>运行结果:<br><figure class="post__image"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2021/05/790caf37116577e34a9d4e311f7faca8.png" alt="pic1.png" data-is-external-image="true"></figure></p>
             ]]>
         </content>
     </entry>
