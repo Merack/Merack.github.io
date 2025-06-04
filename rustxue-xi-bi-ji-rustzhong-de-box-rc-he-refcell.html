@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en-gb"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rust学习笔记: Rust中的Box, Rc 和 RefCell - Merack&#x27;s Home</title><meta name="description" content="最近简单学了下rust, 发现它对内存的管理挺有意思的, 其中用的比较多是Box&lt;T&gt;, Rc&lt;T&gt; 和 RefCell&lt;T&gt;. 这里简单记录下自己的一些理解. Box::new() 用于在堆上分配数据，可以类比成Java和cpp中的new, 但不一样的是Java的GC会自动处理分配在堆上的数据,&hellip;"><meta name="generator" content="Publii Open-Source CMS for Static Site"><link rel="canonical" href="https://blog.merack.top/rustxue-xi-bi-ji-rustzhong-de-box-rc-he-refcell.html"><link rel="alternate" type="application/atom+xml" href="https://blog.merack.top/feed.xml" title="Merack&#x27;s Home - RSS"><link rel="alternate" type="application/json" href="https://blog.merack.top/feed.json" title="Merack&#x27;s Home - JSON"><link rel="shortcut icon" href="https://blog.merack.top/media/website/favicon-16x16.png" type="image/png"><link rel="stylesheet" href="https://blog.merack.top/assets/css/style.css"><script type="application/ld+json">{"@context":"http://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.merack.top/rustxue-xi-bi-ji-rustzhong-de-box-rc-he-refcell.html"},"headline":"Rust学习笔记: Rust中的Box, Rc 和 RefCell","datePublished":"2025-04-10T20:07+08:00","dateModified":"2025-06-04T19:07+08:00","description":"最近简单学了下rust, 发现它对内存的管理挺有意思的, 其中用的比较多是Box&lt;T&gt;, Rc&lt;T&gt; 和 RefCell&lt;T&gt;. 这里简单记录下自己的一些理解. Box::new() 用于在堆上分配数据，可以类比成Java和cpp中的new, 但不一样的是Java的GC会自动处理分配在堆上的数据,&hellip;","author":{"@type":"Person","name":"Merack","url":"https://blog.merack.top/authors/merack/"},"publisher":{"@type":"Organization","name":"Merack"}}</script><noscript><style>img[loading] {
+                    opacity: 1;
+                }</style></noscript></head><body class="post-template"><header class="top js-header"><a class="logo" href="https://blog.merack.top/">Merack&#x27;s Home</a><nav class="navbar js-navbar"><button class="navbar__toggle js-toggle" aria-label="Menu" aria-haspopup="true" aria-expanded="false"><span class="navbar__toggle-box"><span class="navbar__toggle-inner">Menu</span></span></button><ul class="navbar__menu"><li><a href="https://blog.merack.top/about.html" target="_self">About</a></li></ul></nav></header><main class="post"><article class="content"><div class="hero hero--noimage"><header class="hero__content"><div class="wrapper"><h1>Rust学习笔记: Rust中的Box, Rc 和 RefCell</h1><div class="feed__meta content__meta"><img src="https://blog.merack.top/media/website/qbanjinmuyan_Kan-Tu-Wang.web-2.png" loading="eager" height="500" width="458" class="feed__author-thumb" alt="Merack"> <a href="https://blog.merack.top/authors/merack/" class="feed__author">Merack</a> <time datetime="2025-04-10T20:07" class="feed__date">April 10, 2025</time></div></div></header></div><div class="entry-wrapper content__entry"><p>最近简单学了下rust, 发现它对内存的管理挺有意思的, 其中用的比较多是Box&lt;T&gt;, Rc&lt;T&gt; 和 RefCell&lt;T&gt;. 这里简单记录下自己的一些理解.</p><h2>1.Box&lt;T&gt;</h2><p>Box::new() 用于在堆上分配数据，可以类比成Java和cpp中的new, 但不一样的是Java的GC会自动处理分配在堆上的数据, cpp需要手动free, 而rust里的Box 是在离开作用域时自动释放这个内存。</p><pre class="EnlighterJSRAW" data-enlighter-language="rust">struct Data {
+    value: i32,
+}
+
+fn main() {
+    // 在栈上创建一个 Data 实例
+    let data_on_stack = Data { value: 10};
+    println!("栈上的数据: ({})", data_on_stack.value);
+
+    // 使用 Box&lt;T&gt; 在堆上分配一个 Data 实例
+    let data_on_heap: Box&lt;Data&gt; = Box::new(Data { value: 20 });
+
+    // 我们可以像普通引用一样访问 Box 中的数据
+    println!("堆上的数据: ({})", data_on_heap.value);
+
+    // 当 b 离开这个作用域时，堆上的 Data 对象会被自动释放
+    // 不需要手动调用 free 或 delete
+}</pre><p>cargo run的结果:</p><pre>栈上的数据: (10)
+堆上的数据: (20)</pre><p>如果是新版cpp的话(C++11), 它更像是智能指针里的<code>std::unique_ptr</code></p><pre class="EnlighterJSRAW" data-enlighter-language="cpp">#include &lt;iostream&gt;
+#include &lt;memory&gt; // 引入智能指针头文件
+
+class Data {
+public:
+    Data(int val) : value(val) {
+        std::cout &lt;&lt; "Data(" &lt;&lt; value &lt;&lt; ") constructed." &lt;&lt; std::endl;
+    }
+    ~Data() {
+        std::cout &lt;&lt; "Data(" &lt;&lt; value &lt;&lt; ") destructed." &lt;&lt; std::endl;
+    }
+    void printValue() const {
+        std::cout &lt;&lt; "Value: " &lt;&lt; value &lt;&lt; std::endl;
+    }
+private:
+    int value;
+};
+
+int main() {
+    // 创建 unique_ptr, 如果是C++14推荐使用 std::make_unique
+    // std::unique_ptr&lt;Data&gt; ptr1 = std::make_unique&lt;Data&gt;(10);
+
+    // C++11的创建方式:
+    std::unique_ptr&lt;Data&gt; ptr1(new Data(10));
+
+    if (ptr1) { // 检查指针是否有效
+        ptr1-&gt;printValue();
+    }
+
+    // unique_ptr里也有和rust类似的所有权机制
+    std::unique_ptr&lt;Data&gt; ptr2 = std::move(ptr1); // ptr1 现在为空
+
+    if (ptr2) {
+        std::cout &lt;&lt; "ptr2 owns the object:" &lt;&lt; std::endl;
+        ptr2-&gt;printValue();
+    }
+
+    // ptr1所指向的数据所有权已经移动到了ptr2, ptr1目前为空
+    if (!ptr1) {
+        std::cout &lt;&lt; "ptr1 is null." &lt;&lt; std::endl;
+    }
+
+    // 当 ptr2 离开作用域时，它管理的对象会被自动销毁, 不用手动调用free
+    return 0;
+}</pre><p>运行结果:</p><pre>Data(10) constructed.
+Value: 10
+ptr2 owns the object:
+Value: 10
+ptr1 is null.
+Data(10) destructed.</pre><h2>2.Rc&lt;T&gt;</h2><p>Rc&lt;T&gt; (Reference Counting) 可以理解为一个基于引用计数的指针, 使用<code>Rc::clone(&amp;data)</code>会增加1个data的引用计数, 当一个指向data的Rc指针销毁时data的引用计数会减1, 当引用计数为0时对象data会自动销毁.</p><pre class="EnlighterJSRAW" data-enlighter-language="generic">use std::rc::Rc; // 引入 Rc
+
+#[derive(Debug)]
+struct SharedData {
+    value: i32,
+}
+
+fn main() {
+    // 创建一个 SharedData 实例，并用 Rc 包装它
+    // data1 是第一个指向堆上 SharedData 的 Rc 指针
+    let data1 = Rc::new(SharedData { value: 10 });
+
+    // 打印初始引用计数(强引用)
+    println!("初始引用计数: {}", Rc::strong_count(&amp;data1)); // 输出: 1
+
+    // 克隆 Rc 指针，这会增加引用计数
+    // data2 也指向堆上同一个 SharedData 实例
+    let data2 = Rc::clone(&amp;data1);
+    println!("克隆后 data1 的引用计数: {}", Rc::strong_count(&amp;data1)); // 输出: 2
+    println!("data2 的引用计数: {}", Rc::strong_count(&amp;data2));       // 输出: 2
+
+    { // 创建一个新的作用域
+        // data3 也指向同一个数据
+        let data3 = Rc::clone(&amp;data1);
+        println!("在新的作用域中，引用计数: {}", Rc::strong_count(&amp;data1)); // 输出: 3
+    } // data3 在这里离开作用域，引用计数减 1
+
+    println!("data3 离开作用域后，引用计数: {}", Rc::strong_count(&amp;data1)); // 输出: 2
+
+    // 我们可以通过任一 Rc 指针访问数据
+    println!("data1 中的数据: {:?}", data1.value);
+    println!("data2 中的数据: {:?}", data2.value);
+
+    // 当 data1 和 data2 都离开作用域时，引用计数变为 0，SharedData 会被释放
+}</pre><p>cargo run结果:</p><pre>初始引用计数: 1
+克隆后 data1 的引用计数: 2
+data2 的引用计数: 2
+在新的作用域中，引用计数: 3
+data3 离开作用域后，引用计数: 2
+data1 中的数据: 10
+data2 中的数据: 10</pre><p>Rc 类似于c++11中的智能指针<code>std::shared_ptr</code></p><pre class="EnlighterJSRAW" data-enlighter-language="cpp">#include &lt;iostream&gt;
+#include &lt;memory&gt; // 引入智能指针头文件
+#include &lt;vector&gt;
+
+class SharedData {
+public:
+    SharedData(int id) : value(id) {
+        std::cout &lt;&lt; "SharedData(" &lt;&lt; value &lt;&lt; ") acquired." &lt;&lt; std::endl;
+    }
+    ~SharedData() {
+        std::cout &lt;&lt; "SharedData(" &lt;&lt; value &lt;&lt; ") released." &lt;&lt; std::endl;
+    }
+    int get_value() const { return value; }
+private:
+    int value;
+};
+
+int main() {
+    // 创建 shared_ptr
+    std::shared_ptr&lt;SharedData&gt; sp1 = std::make_shared&lt;SharedData&gt;(10);
+    std::cout &lt;&lt; "sp1 use_count: " &lt;&lt; sp1.use_count() &lt;&lt; std::endl; // 输出: 1
+
+    // sp2与sp1共享所有权
+    std::shared_ptr&lt;SharedData&gt; sp2 = sp1; // 拷贝构造，引用计数增加
+    std::cout &lt;&lt; "sp1 use_count: " &lt;&lt; sp1.use_count() &lt;&lt; std::endl; // 输出: 2
+    std::cout &lt;&lt; "sp2 use_count: " &lt;&lt; sp2.use_count() &lt;&lt; std::endl; // 输出: 2
+
+    // 重置 sp1
+    sp1.reset(); // sp1 不再指向任何对象，引用计数减1
+    std::cout &lt;&lt; "After sp1.reset(), sp2 use_count: " &lt;&lt; sp2.use_count() &lt;&lt; std::endl; // 输出: 1
+
+    // 当所有指向 SharedData的 shared_ptr 离开作用域或被重置时，对应的 SharedData 对象会被销毁。
+    return 0;
+}</pre><p>使用Rc时要额外注意循环引用的问题, 即不同对象间相互引用形成闭环, 这样计数器永远不为0, 所指向的内存就无法释放.解决方法是用<code>Weak&lt;T&gt;</code>, 对应C++11 中的 <code>std::weak_ptr</code> Rc::clone 做到了让多个所有者共享同一份数据的所有权, 但它所指向的数据是只读的, 不可以修改. 但是可以配合下面提到的RefCell来实现数据的"内部可变性"</p><h2>3.RefCell&lt;T&gt;</h2><h3>内部可变性</h3><p>RefCell&lt;T&gt;中的T被设计成总是可以修改的, 即使外部指向RefCell&lt;T&gt;的是一个不可变的引用. 因此它可以用来实现内部数据的可变性. 它常常与上文提到的Rc&lt;T&gt;配合使用, 来实现共享所有权的情况下又能修改里面的数据(Rc&lt;T&gt;里的数据默认是只读的).</p><pre class="EnlighterJSRAW" data-enlighter-language="generic">use std::cell::RefCell; // 引入 RefCell
+use std::rc::Rc;       // 与 Rc 配合使用
+
+#[derive(Debug)]
+struct MutableSharedData {
+    value: i32,
+}
+
+fn main() {
+    // 创建一个 Rc&lt;RefCell&lt;MutableSharedData&gt;&gt;
+    // Rc 允许多所有权
+    // RefCell 允许内部可变性
+    let shared_data_rc = Rc::new(RefCell::new(MutableSharedData { value: 10 }));
+
+    // 克隆 Rc，创建另一个所有者
+    let owner1 = Rc::clone(&amp;shared_data_rc);
+    let owner2 = Rc::clone(&amp;shared_data_rc);
+
+    // owner1 通过 RefCell 的 borrow_mut() 获取可变借用，并修改数据
+    {
+        let mut mutable_borrow = owner1.borrow_mut(); // 获取可变借用
+        mutable_borrow.value += 5;
+        println!("owner1 修改后: {:?}", mutable_borrow); // 输出15
+    } // 可变借用在这里释放
+
+    // owner2 通过 RefCell 的 borrow() 获取不可变借用，并读取数据
+    {
+        let immutable_borrow = owner2.borrow(); // 获取不可变借用
+        println!("owner2 读取到: {:?}", immutable_borrow);  // 输出 15
+    } // 不可变借用在这里释放
+
+    // 再次通过 shared_data_rc 修改
+    shared_data_rc.borrow_mut().value = 100;
+    println!("直接通过 shared_data_rc 修改后: {:?}", shared_data_rc.borrow()); // 输出 100
+}</pre><p>cargo run 结果:</p><pre>owner1 修改后: MutableSharedData { value: 15 }
+owner2 读取到: MutableSharedData { value: 15 }
+直接通过 shared_data_rc 修改后: MutableSharedData { value: 100 }</pre><h3>运行时借用规则检查</h3><p>从上面的示例代码可以看出, 对RefCell&lt;T&gt; 里的数据的操作仍然遵循rust的借用规则, 即: 只能存在单一可变引用或任意数量的不可变引用. 其借用主要是通过<code>borrow_mut()</code> 和 <code>borrow()</code> 这两个函数实现,  但有意思的是RefCell&lt;T&gt;的借用检查是发生在运行阶段而不是像普通的借用检查一样发生在编译时, 也就是说编译器会忽略这个"Cell"里的数据的借用检查, 即使你违反规定了也能编译通过, 但是会在运行时报错. 下面是一段违反了借用规则的错误代码:</p><pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::cell::RefCell;
+
+fn main() {
+    let data = RefCell::new(String::from("hello")); 
+
+    let _r1 = data.borrow();       // 获取一个不可变借用，计数器记录有一个不可变借用
+    let _r2 = data.borrow_mut(); // 这里违反了借用规则,但是能编译通过, 但会在运行时错误！
+
+    // 若要成功获取 r2，必须先让 r1 失效（离开作用域或显式 drop）
+    // drop(r1); // 显式 drop r1
+    // let r2_ok = data.borrow_mut();
+    // println!("r2_ok can now be used");
+}</pre><figure class="alignnone size-full wp-image-190">这里的_r2 是明显违反了借用规则的, 但是cargo test 和cargo build 都能通过, 因为他们都发生在编译时 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/e0b67c34-0baf-bc0b-61b9-7c8b37b01010.png"><img src="https://cdn.merack.top/wp-content/uploads/2025/06/e0b67c34-0baf-bc0b-61b9-7c8b37b01010.png" alt="" width="870" height="288" data-is-external-image="true"></a></figure>但是 cargo run时就会发生错误, 因为在运行时每次调用<code>borrow_mut()</code> 和 <code>borrow()</code>都会出发借用检查 <a href="https://cdn.merack.top/wp-content/uploads/2025/06/aff5a006-8e46-d47a-da13-c717eee21b46.png"><figure class="alignnone size-full wp-image-191"><img loading="lazy" src="https://cdn.merack.top/wp-content/uploads/2025/06/aff5a006-8e46-d47a-da13-c717eee21b46.png" alt="" width="757" height="181" data-is-external-image="true"></figure></a>所以在使用RefCell&lt;T&gt; 时要特别小心里面数据的借用情况, 编译器不会帮你做检查只能依赖程序员自己分析.<p></p><h2>后记</h2><p>rust学起来难度确实比其他语言陡峭, 但所有权与借用规则其实不是很难理解, 个人感觉真正不好学的还是rust里生命周期, 经常搞不明白什么时候该加什么时候不用加. 就算加上了也只是让代码能编译通过而已, 自己也还不会推断这个生命周期到底能持续多长, 后面还得慢慢学.</p></div><footer class="content__footer"><div class="entry-wrapper"><div class="content__actions"></div></div><nav class="content__nav"><div class="wrapper"><div class="content__nav-inner"><div class="content__nav-prev"><a href="https://blog.merack.top/shi-yong-cloudflare-workerjia-su-cloudflare-r2fang-wen-su-du.html" class="content__nav-link" rel="prev"><div><span>Previous</span> 使用Cloudflare worker加速Cloudflare R2访问速度</div></a></div><div class="content__nav-next"><a href="https://blog.merack.top/shelljiao-ben-linuxding-shi-bei-fen-bing-tong-guo-webdavshang-chuan-zhi-jian-guo-yun.html" class="content__nav-link" rel="next"><div><span>Next</span> shell脚本 - Linux定时备份并通过WebDAV上传至坚果云</div></a></div></div></div></nav></footer></article></main><footer class="footer"><div class="wrapper"><div class="footer__copyright"><p>Powered by Publii</p><div style="flex; align-items: center; justify-content: center;"><a href="https://cloudflare.com/"><img src="https://cdn.merack.top/wp-content/uploads/2024/12/ae2e8d68-158b-1842-fc34-0ebcc1365d6c.png" alt="cloudflare"> </a><a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral"><img style="margin-right: 1px; vertical-align: middle;" src="https://cdn.merack.top/wp-content/uploads/2024/12/8a9de8d6-7a3c-e553-b074-cf653f15d712.png" alt="upyun"> </a><a href="https://cloudflare.com/">提供CDN服务</a></div></div><button onclick="backToTopFunction()" id="backToTop" class="footer__bttop" aria-label="Back to top" title="Back to top"><svg width="20" height="20"><use xlink:href="https://blog.merack.top/assets/svg/svg-map.svg#toparrow"/></svg></button></div></footer><script defer="defer" src="https://blog.merack.top/assets/js/scripts.min.js"></script><script>window.publiiThemeMenuConfig={mobileMenuMode:'overlay',animationSpeed:300,submenuWidth: 'auto',doubleClickTime:500,mobileMenuExpandableSubmenus:true,relatedContainerForOverlayMenuSelector:'.top'};</script><script>var images = document.querySelectorAll('img[loading]');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].complete) {
+                images[i].classList.add('is-loaded');
+            } else {
+                images[i].addEventListener('load', function () {
+                    this.classList.add('is-loaded');
+                }, false);
+            }
+        }</script></body></html>
