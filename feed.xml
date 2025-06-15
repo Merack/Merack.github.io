@@ -3,7 +3,7 @@
     <title>Merack&#x27;s Home</title>
     <link href="https://blog.merack.top/feed.xml" rel="self" />
     <link href="https://blog.merack.top" />
-    <updated>2025-06-08T19:23:58+08:00</updated>
+    <updated>2025-06-15T15:38:24+08:00</updated>
     <author>
         <name>Merack</name>
     </author>
@@ -107,7 +107,7 @@ echo "===================== Backup Done at $(date)==============================
         <link href="https://blog.merack.top/yong-flutterkai-fa-de-yi-kuan-ji-yu-sui-ji-jiang-li-ji-zhi-de-zhuan-zhu-xue-xi-app.html"/>
         <id>https://blog.merack.top/yong-flutterkai-fa-de-yi-kuan-ji-yu-sui-ji-jiang-li-ji-zhi-de-zhuan-zhu-xue-xi-app.html</id>
 
-        <updated>2025-05-18T19:14:00+08:00</updated>
+        <updated>2025-05-28T19:14:00+08:00</updated>
             <summary>
                 <![CDATA[
                     灵感来源于之前看到的一个B站视频: BV1naLozQEBq , 觉得挺有意思的, 联想到很久之前学的Flutter也没有怎么练习过, 于是本着复习Flutter的想法断断续续捣鼓出的一个玩具. 原理引用下GitHub上JokerQianwei/Focus 项目的README: 还可以在这个链接了解: https://www.yuque.com/u43692620/yyl2g7/fup4ss9g56olg3gy&hellip;
@@ -197,7 +197,7 @@ var isRunning = false</pre>
       }
     }
   }</pre>
-<p>3. 暂停</p>
+<p><strong>3. 暂停</strong></p>
 <pre class="EnlighterJSRAW" data-enlighter-language="generic">/// 暂停计时器
   void _pauseTimer() {
     // 一同暂停专注和微休息
@@ -291,7 +291,8 @@ var isRunning = false</pre>
     resetTimer();
   }</pre>
 <h4>微休息计时器相关</h4>
-<p>微休息会话的开启其实是由前面的开始专注会话<code>_startFocusSession()</code>里随专注计时器一同开启的, 因此微休息这里只要处理微休息计数器逻辑和微休息状态完成的逻辑就可以了. 但是微休息来临计时的完成和微休息的完成都没有像专注和大休息一样分开写相应的complete函数, 而是都把complete的逻辑分散到<code>_startMicroBreakCountdown</code> 和<code>_handleMicroBreakStatus</code>里了, 所以这部分看起来有点屎山, 后面有空再优化 1.处理微休息到来间隔计时和微休息期间计时</p>
+<p>微休息会话的开启其实是由前面的开始专注会话<code>_startFocusSession()</code>里随专注计时器一同开启的, 因此微休息这里只要处理微休息计数器逻辑和微休息状态完成的逻辑就可以了. 但是微休息来临计时的完成和微休息的完成都没有像专注和大休息一样分开写相应的complete函数, 而是都把complete的逻辑分散到<code>_startMicroBreakCountdown</code> 和<code>_handleMicroBreakStatus</code>里了, 所以这部分看起来有点屎山, 后面有空再优化</p>
+<p><strong>1.处理微休息到来间隔计时和微休息期间计时</strong></p>
 <pre class="EnlighterJSRAW" data-enlighter-language="generic">void _startMicroBreakCountdown() {
     // 检查微休息是否启用
     if (!microBreakEnabled) {
@@ -324,7 +325,7 @@ var isRunning = false</pre>
       });
     }
   }</pre>
-<p>2. 处理微休息计数器计时完成逻辑</p>
+<p><strong>2. 处理微休息计数器计时完成逻辑</strong></p>
 <pre class="EnlighterJSRAW" data-enlighter-language="generic">void _handleMicroBreakStatus({required bool isStartMicroBreak}) {
     // 开始微休息
     if (isStartMicroBreak) {
